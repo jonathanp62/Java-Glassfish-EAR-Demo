@@ -1,0 +1,17 @@
+Glassfish-EAR-Demo
+------------------
+
+A demonstration of a basic EAR application running Glassfish 8.
+
+== Gradle Tasks for Glassfish deployment
+
+Add the --no-configuration-cache option to disable the configuration cache as needed.
+
+[options="header"]
+|=======================
+|Task Name | Application Invocation
+|deploy    | No arguments
+|=======================
+
+Current version: 0.1.0.
+~~~~~~~~~~~~~~~~~~~~~~~
