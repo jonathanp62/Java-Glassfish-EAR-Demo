@@ -1,8 +1,8 @@
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
+ * @version  0.3.0
  * @since    0.1.0
  *
  * MIT License
@@ -28,15 +28,4 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
-
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
-}
-
-rootProject.name = 'Glassfish-EAR-Demo'
-
-include 'demo-ejb', 'demo-war', 'demo-ear'
+// Just inherit everything from the parent
