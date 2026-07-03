@@ -36,3 +36,9 @@ dependencies {
     // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
     compileOnly project(':demo-ejb')
 }
+
+war {
+    filesMatching('WEB-INF/web.xml') {
+        expand(appVersion: project.version)
+    }
+}

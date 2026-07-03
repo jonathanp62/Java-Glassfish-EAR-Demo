@@ -53,6 +53,8 @@ repositories {
 }
 
 subprojects {
+    version = "${appVersion}"
+
     apply plugin: 'java'
 
     repositories {
