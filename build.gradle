@@ -1,8 +1,8 @@
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
+ * @version  0.3.0
  * @since    0.1.0
  *
  * MIT License
@@ -28,15 +28,52 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
+/*
+ * The following system property must be set in HOME/.gradle/gradle.properties:
+ *   systemProp.macosArchitecture=silicon
+ *
+ * Pass command line arguments to the Java program as follows:
+ *   gradle <JavaExec Task> --args="arg1 arg2 arg3"
+ *
+ */
 
-pluginManagement {
+plugins {
+	id 'java'
+	id 'net.jmp.gradle.plugin.projectinfo-info'	version '0.3.0'
+}
+
+ext {
+	project.group = 'net.jmp.demo.glassfish.ear'
+	project.version = "${appVersion}"
+	project.description = 'to demonstrate a basic EAR application running Glassfish 8'
+}
+
+repositories {
+	mavenLocal()
+}
+
+subprojects {
+    apply plugin: 'java'
+
     repositories {
-        mavenLocal()
-        gradlePluginPortal()
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly libs.jakarta.jakartaee.api
+    }
+    
+    tasks.compileJava {
+        options.forkOptions.jvmArgs = ["-Xmx8192m", "--enable-native-access=ALL-UNNAMED"]
+        options.release.set(25)
     }
 }
 
-rootProject.name = 'Glassfish-EAR-Demo'
 
-include 'demo-ejb', 'demo-war', 'demo-ear'
+java.sourceCompatibility = JavaVersion.VERSION_25
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(25)
+	}
+}

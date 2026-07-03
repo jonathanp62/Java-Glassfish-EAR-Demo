@@ -9,9 +9,12 @@ Add the --no-configuration-cache option to disable the configuration cache as ne
 
 [options="header"]
 |=======================
-|Task Name | Application Invocation
-|deploy    | No arguments
+|Task Name        | Application Invocation
+|:demo-ear:build  | No arguments
+|:demo-ear:deploy | No arguments
 |=======================
+
+The demo-ear.ear file is created in the demo-ear/build/libs directory.
 
 Current version: 0.1.0.
 ~~~~~~~~~~~~~~~~~~~~~~~
