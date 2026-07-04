@@ -1,9 +1,9 @@
+package net.jmp.demo.glassfish.ejb.service;
+
 /*
- * (#)build.gradle  0.1.0   07/03/2026
+ * (#)HelloService.java 0.2.0   07/04/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,32 +28,12 @@
  * SOFTWARE.
  */
 
-plugins {
-    id 'war'
-}
+import jakarta.ejb.Stateless;
 
-configurations {
-    warArchive {
-        canBeConsumed = true
-        canBeResolved = false
-    }
-}
-
-dependencies {
-    // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
-    compileOnly project(':demo-ejb')
-}
-
-artifacts {
-    warArchive tasks.named('war')
-}
-
-tasks.named('jar') {
-    enabled = false
-}
-
-war {
-    filesMatching('WEB-INF/web.xml') {
-        expand(appVersion: project.version)
+/// The hello service
+@Stateless
+public class HelloService {
+    public String hello(final String name) {
+        return "Hello, " + name + " from the hello service";
     }
 }

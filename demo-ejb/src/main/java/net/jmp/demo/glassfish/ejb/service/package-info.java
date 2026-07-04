@@ -1,9 +1,9 @@
+package net.jmp.demo.glassfish.ejb.service;
+
 /*
- * (#)build.gradle  0.1.0   07/03/2026
+ * (#)package-info.java 0.1.0   07/04/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -27,33 +27,3 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-
-plugins {
-    id 'war'
-}
-
-configurations {
-    warArchive {
-        canBeConsumed = true
-        canBeResolved = false
-    }
-}
-
-dependencies {
-    // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
-    compileOnly project(':demo-ejb')
-}
-
-artifacts {
-    warArchive tasks.named('war')
-}
-
-tasks.named('jar') {
-    enabled = false
-}
-
-war {
-    filesMatching('WEB-INF/web.xml') {
-        expand(appVersion: project.version)
-    }
-}

@@ -35,7 +35,7 @@ plugins {
 dependencies {
     // Deploy these modules inside the root of the EAR
     deploy project(':demo-ejb')
-    deploy project(path: ':demo-war', configuration: 'archives')
+    deploy project(path: ':demo-war', configuration: 'warArchive')
 }
 
 ear {
