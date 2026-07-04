@@ -30,12 +30,22 @@
 
 plugins {
     id 'ear'
+    id 'java'
 }
 
 dependencies {
     // Deploy these modules inside the root of the EAR
     deploy project(':demo-ejb')
     deploy project(path: ':demo-war', configuration: 'warArchive')
+
+    // Place the logging implementation and configuration in the EAR's lib directory
+    // so they are shared by the EJB and WAR modules at runtime
+    earlib libs.bundles.logging
+    earlib project(':demo-logging')
+}
+
+tasks.named('jar') {
+    enabled = false
 }
 
 ear {

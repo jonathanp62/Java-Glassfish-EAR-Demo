@@ -28,21 +28,34 @@
 # SOFTWARE.
 
 [versions]
+ch-qos-logback-logback-classic = "1.5.32"
 errorprone-core = "2.49.0"
 errorprone-plugin = "4.2.0"
 glassfish-servlet-jsp-jstl = "3.0.1"
 jakarta-platform-jakarta-jakartaee-api = "11.0.0"
 jakarta-servlet-jsp-jstl = "3.0.2"
+net-jmp-util-logging-logging-utilities = "1.2.0"
 nullaway = "0.13.4"
 org-jspecify-jspecify = "1.0.0"
+org-slf4j-slf4j-api = "2.0.18"
 
 [libraries]
+ch-qos-logback-logback-classic = { module = "ch.qos.logback:logback-classic", version.ref = "ch-qos-logback-logback-classic" }
 errorprone-core = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone-core" }
 glassfish-jakarta-servlet-jsp-jstl = { module = "org.glassfish.web:jakarta.servlet.jsp.jstl", version.ref = "glassfish-servlet-jsp-jstl" }
 jakarta-jakartaee-api = { module = "jakarta.platform:jakarta.jakartaee-api", version.ref = "jakarta-platform-jakarta-jakartaee-api" }
 jakarta-servlet-jsp-jstl-api = { module = "jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api", version.ref = "jakarta-servlet-jsp-jstl" }
+net-jmp-util-logging-logging-utilities = { module = "net.jmp.util.logging:logging-utilities", version.ref = "net-jmp-util-logging-logging-utilities" }
 nullaway = { module = "com.uber.nullaway:nullaway", version.ref = "nullaway" }
 org-jspecify-jspecify = { module = "org.jspecify:jspecify", version.ref = "org-jspecify-jspecify" }
+org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j-slf4j-api" }
+
+[bundles]
+logging = [
+    "ch-qos-logback-logback-classic",
+    "net-jmp-util-logging-logging-utilities",
+    "org-slf4j-slf4j-api"
+]
 
 [plugins]
 errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }

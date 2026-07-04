@@ -62,14 +62,17 @@ subprojects {
 
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
         compileOnly libs.jakarta.jakartaee.api
         compileOnly libs.org.jspecify.jspecify
 
-        errorprone libs.errorprone.core
-        errorprone libs.nullaway
+        compileOnly  libs.bundles.logging
+
+        errorprone  libs.errorprone.core
+        errorprone  libs.nullaway
     }
 
     tasks.compileJava {

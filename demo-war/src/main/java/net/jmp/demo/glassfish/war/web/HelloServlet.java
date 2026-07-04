@@ -42,11 +42,20 @@ import java.io.IOException;
 
 import net.jmp.demo.glassfish.ejb.service.HelloService;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import static net.jmp.util.logging.LoggerUtils.entryWith;
+import static net.jmp.util.logging.LoggerUtils.exit;
+
 /// The hello servlet class
 @WebServlet(urlPatterns = "/servlet/hello")
 public class HelloServlet extends HttpServlet {
     /// The registration form JSP
     private static final String HELLO_JSP = "/WEB-INF/jsp/hello.jsp";
+
+    // Initialize the SLF4J Logger
+    private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /// The hello service
     @EJB
@@ -60,9 +69,17 @@ public class HelloServlet extends HttpServlet {
     /// @throws             java.io.IOException                 When an I/O error occurs
     @Override
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(request, response));
+        }
+
         final String greeting = this.helloService.hello("Jonathan");
 
         request.setAttribute("greeting", greeting);
         request.getRequestDispatcher(HELLO_JSP).forward(request, response);
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exit());
+        }
     }
 }
