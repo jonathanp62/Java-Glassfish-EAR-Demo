@@ -1,7 +1,8 @@
-package net.jmp.demo.glassfish.ejb.service;
+@NullMarked
+package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)HelloService.java 0.1.0   07/04/2026
+ * (#)package-info.java 0.1.0   07/04/2026
  *
  * @author   Jonathan Parker
  *
@@ -28,12 +29,4 @@ package net.jmp.demo.glassfish.ejb.service;
  * SOFTWARE.
  */
 
-import jakarta.ejb.Stateless;
-
-/// The hello service
-@Stateless
-public class HelloService {
-    public String hello(final String name) {
-        return "Hello, " + name + " from the hello service";
-    }
-}
+import org.jspecify.annotations.NullMarked;

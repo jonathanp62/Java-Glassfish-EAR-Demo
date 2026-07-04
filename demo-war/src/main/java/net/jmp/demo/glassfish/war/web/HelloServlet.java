@@ -50,7 +50,7 @@ public class HelloServlet extends HttpServlet {
 
     /// The hello service
     @EJB
-    private HelloService helloService;
+    private transient HelloService helloService;
 
     /// The GET method
     ///

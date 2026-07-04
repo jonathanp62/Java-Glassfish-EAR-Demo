@@ -28,11 +28,21 @@
 # SOFTWARE.
 
 [versions]
+errorprone-core = "2.49.0"
+errorprone-plugin = "4.2.0"
 glassfish-servlet-jsp-jstl = "3.0.1"
 jakarta-platform-jakarta-jakartaee-api = "11.0.0"
 jakarta-servlet-jsp-jstl = "3.0.2"
+nullaway = "0.13.4"
+org-jspecify-jspecify = "1.0.0"
 
 [libraries]
+errorprone-core = { module = "com.google.errorprone:error_prone_core", version.ref = "errorprone-core" }
 glassfish-jakarta-servlet-jsp-jstl = { module = "org.glassfish.web:jakarta.servlet.jsp.jstl", version.ref = "glassfish-servlet-jsp-jstl" }
 jakarta-jakartaee-api = { module = "jakarta.platform:jakarta.jakartaee-api", version.ref = "jakarta-platform-jakarta-jakartaee-api" }
 jakarta-servlet-jsp-jstl-api = { module = "jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api", version.ref = "jakarta-servlet-jsp-jstl" }
+nullaway = { module = "com.uber.nullaway:nullaway", version.ref = "nullaway" }
+org-jspecify-jspecify = { module = "org.jspecify:jspecify", version.ref = "org-jspecify-jspecify" }
+
+[plugins]
+errorprone = { id = "net.ltgt.errorprone", version.ref = "errorprone-plugin" }

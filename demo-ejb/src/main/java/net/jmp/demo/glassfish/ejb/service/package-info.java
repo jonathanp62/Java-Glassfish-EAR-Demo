@@ -1,3 +1,4 @@
+@NullMarked
 package net.jmp.demo.glassfish.ejb.service;
 
 /*
@@ -27,3 +28,5 @@ package net.jmp.demo.glassfish.ejb.service;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
+
+import org.jspecify.annotations.NullMarked;
