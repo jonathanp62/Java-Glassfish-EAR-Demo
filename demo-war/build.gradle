@@ -57,7 +57,9 @@ tasks.named('jar') {
 }
 
 war {
+    def appVersion = project.version
+
     filesMatching('WEB-INF/web.xml') {
-        expand(appVersion: project.version)
+        expand(appVersion: appVersion)
     }
 }

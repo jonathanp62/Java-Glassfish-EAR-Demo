@@ -40,5 +40,6 @@
     <body>
         <h2>Glassfish EAR Demo</h2>
         <p><a href="<c:url value='/servlet/hello' />">Hello</a></p>
+        <p>Version: <c:out value="${initParam.appVersion}" /></p>
     </body>
 </html>
