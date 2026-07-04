@@ -42,6 +42,10 @@ configurations {
 dependencies {
     // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
     compileOnly project(':demo-ejb')
+
+    compileOnly libs.jakarta.servlet.jsp.jstl.api
+
+    runtimeOnly libs.glassfish.jakarta.servlet.jsp.jstl
 }
 
 artifacts {

@@ -28,7 +28,11 @@
 # SOFTWARE.
 
 [versions]
+glassfish-servlet-jsp-jstl = "3.0.1"
 jakarta-platform-jakarta-jakartaee-api = "11.0.0"
+jakarta-servlet-jsp-jstl = "3.0.2"
 
 [libraries]
+glassfish-jakarta-servlet-jsp-jstl = { module = "org.glassfish.web:jakarta.servlet.jsp.jstl", version.ref = "glassfish-servlet-jsp-jstl" }
 jakarta-jakartaee-api = { module = "jakarta.platform:jakarta.jakartaee-api", version.ref = "jakarta-platform-jakarta-jakartaee-api" }
+jakarta-servlet-jsp-jstl-api = { module = "jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api", version.ref = "jakarta-servlet-jsp-jstl" }
