@@ -54,6 +54,14 @@ repositories {
 	mavenLocal()
 }
 
+allprojects {
+    configurations {
+        mockitoAgent {
+            transitive = false
+        }
+    }
+}
+
 subprojects {
     version = "${appVersion}"
 
@@ -68,11 +76,19 @@ subprojects {
     dependencies {
         compileOnly libs.jakarta.jakartaee.api
         compileOnly libs.org.jspecify.jspecify
-
-        compileOnly  libs.bundles.logging
+        compileOnly libs.bundles.logging
 
         errorprone  libs.errorprone.core
         errorprone  libs.nullaway
+
+        testImplementation	libs.bundles.testing
+        testImplementation	libs.jakarta.jakartaee.api
+
+        mockitoAgent 		libs.org.mockito.mockito.core
+
+        testRuntimeOnly		libs.ch.qos.logback.logback.classic
+        testRuntimeOnly		libs.org.glassfish.expressly.expressly
+        testRuntimeOnly		'org.junit.platform:junit-platform-launcher'
     }
 
     tasks.compileJava {
@@ -83,6 +99,23 @@ subprojects {
             disableAllChecks = true
             option("NullAway:AnnotatedPackages", "net.jmp.demo.glassfish")
         }
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+
+        // Register a cache-compliant provider for JVM arguments
+
+        jvmArgumentProviders.add(new CommandLineArgumentProvider() {
+            @InputFiles
+            @PathSensitive(PathSensitivity.RELATIVE)
+            FileCollection agentFiles = configurations.mockitoAgent
+
+            @Override
+            Iterable<String> asArguments() {
+                return ["-javaagent:${agentFiles.singleFile.absolutePath}"]
+            }
+        })
     }
 }
 
