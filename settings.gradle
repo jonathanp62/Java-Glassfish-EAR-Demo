@@ -39,4 +39,4 @@ pluginManagement {
 
 rootProject.name = 'Glassfish-EAR-Demo'
 
-include 'demo-ear', 'demo-ejb', 'demo-logging', 'demo-war'
+include 'demo-ear', 'demo-ejb', 'demo-i18n', 'demo-logging', 'demo-war'

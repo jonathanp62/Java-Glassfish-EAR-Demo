@@ -30,6 +30,13 @@ package net.jmp.demo.glassfish.ejb.service;
 
 import jakarta.ejb.Stateless;
 
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+import java.text.MessageFormat;
+
+import java.util.ResourceBundle;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +49,11 @@ public class HelloService {
     // Initialize the SLF4J Logger
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    // The resource bundle
+    @Inject
+    @Named("messages")
+    private ResourceBundle bundle;
+
     /// The hello method
     ///
     /// @param  name    java.lang.String
@@ -51,7 +63,8 @@ public class HelloService {
             this.logger.trace(entryWith(name));
         }
 
-        final String result = "Hello, " + name + " from the hello service";
+        final String pattern = this.bundle.getString("service.hello.greeting");
+        final String result = MessageFormat.format(pattern, name);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(result));

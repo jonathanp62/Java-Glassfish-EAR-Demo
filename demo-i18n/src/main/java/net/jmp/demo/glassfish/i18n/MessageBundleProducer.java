@@ -1,9 +1,9 @@
+package net.jmp.demo.glassfish.i18n;
+
 /*
- * (#)build.gradle  0.1.0   07/03/2026
+ * (#)MessageBundleProducer.java    0.1.0   07/06/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,39 +28,24 @@
  * SOFTWARE.
  */
 
-plugins {
-    id 'ear'
-    id 'java'
-}
+import jakarta.enterprise.context.ApplicationScoped;
 
-dependencies {
-    // Deploy these modules inside the root of the EAR
-    deploy project(':demo-ejb')
-    deploy project(path: ':demo-war', configuration: 'warArchive')
+import jakarta.enterprise.inject.Produces;
 
-    // Place the logging implementation and configuration in the EAR's lib directory
-    // so they are shared by the EJB and WAR modules at runtime
-    earlib libs.bundles.logging
-    earlib project(':demo-i18n')
-    earlib project(':demo-logging')
-}
+import jakarta.inject.Named;
 
-tasks.named('jar') {
-    enabled = false
-}
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-ear {
-    // Set the Jakarta EE version for the application.xml deployment descriptor
-    deploymentDescriptor {
-        version = "11" 
-        
-        // Explicitly set the web context root so it matches our URL structure
-        webModule("demo-war-${project.version}.war", "/demo-ear-app")
+/// The message bundle producer class
+@ApplicationScoped
+public class MessageBundleProducer {
+    /// The get bundle method
+    ///
+    /// @return java.util.ResourceBundle
+    @Produces
+    @Named("messages")
+    public ResourceBundle getBundle() {
+        return ResourceBundle.getBundle("messages", Locale.getDefault());
     }
-}
-
-tasks.register('deploy', Copy) {
-    dependsOn build			// Forces a fresh build before deploying
-    from ear.archiveFile	// Path to your local built EAR file
-    into '/opt/glassfish/glassfish8/glassfish/domains/jonathan/autodeploy'
 }
