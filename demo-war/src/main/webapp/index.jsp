@@ -29,17 +29,18 @@
 --%>
 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>Glassfish EAR Demo</title>
+        <title><fmt:message key="jsp.index.title" /></title>
         <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
     </head>
     <body>
-        <h2>Glassfish EAR Demo</h2>
-        <p><a href="<c:url value='/servlet/hello' />">Hello</a></p>
+        <h2><fmt:message key="jsp.index.title" /></h2>
+        <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
         <p>Version: <c:out value="${initParam.appVersion}" /></p>
     </body>
 </html>
