@@ -2,7 +2,7 @@
  * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
+ * @version  0.1.0
  * @since    0.1.0
  *
  * MIT License
@@ -46,6 +46,8 @@ dependencies {
     compileOnly libs.jakarta.servlet.jsp.jstl.api
 
     runtimeOnly libs.glassfish.jakarta.servlet.jsp.jstl
+
+    testImplementation project(':demo-ejb')
 }
 
 artifacts {

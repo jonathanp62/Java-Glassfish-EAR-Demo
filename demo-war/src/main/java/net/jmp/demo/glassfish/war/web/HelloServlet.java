@@ -42,6 +42,8 @@ import java.io.IOException;
 
 import net.jmp.demo.glassfish.ejb.service.HelloService;
 
+import org.jspecify.annotations.Nullable;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +61,7 @@ public class HelloServlet extends HttpServlet {
 
     /// The hello service
     @EJB
-    private transient HelloService helloService;
+    private transient @Nullable HelloService helloService;
 
     /// The GET method
     ///
@@ -71,6 +73,10 @@ public class HelloServlet extends HttpServlet {
     protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws ServletException, IOException {
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(entryWith(request, response));
+        }
+
+        if (this.helloService == null) {
+            throw new ServletException("HelloService has not been injected");
         }
 
         final String greeting = this.helloService.hello("Jonathan");
