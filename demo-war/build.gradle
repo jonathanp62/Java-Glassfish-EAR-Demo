@@ -2,7 +2,7 @@
  * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
+ * @version  0.1.0
  * @since    0.1.0
  *
  * MIT License
@@ -32,13 +32,36 @@ plugins {
     id 'war'
 }
 
+configurations {
+    warArchive {
+        canBeConsumed = true
+        canBeResolved = false
+    }
+}
+
 dependencies {
     // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
     compileOnly project(':demo-ejb')
+
+    compileOnly libs.jakarta.servlet.jsp.jstl.api
+
+    runtimeOnly libs.glassfish.jakarta.servlet.jsp.jstl
+
+    testImplementation project(':demo-ejb')
+}
+
+artifacts {
+    warArchive tasks.named('war')
+}
+
+tasks.named('jar') {
+    enabled = false
 }
 
 war {
+    def appVersion = project.version
+
     filesMatching('WEB-INF/web.xml') {
-        expand(appVersion: project.version)
+        expand(appVersion: appVersion)
     }
 }

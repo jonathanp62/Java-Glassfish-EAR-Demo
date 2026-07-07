@@ -1,9 +1,10 @@
+@NullMarked
+package net.jmp.demo.glassfish.ejb.service;
+
 /*
- * (#)build.gradle  0.1.0   07/03/2026
+ * (#)package-info.java 0.1.0   07/04/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,39 +29,4 @@
  * SOFTWARE.
  */
 
-plugins {
-    id 'ear'
-    id 'java'
-}
-
-dependencies {
-    // Deploy these modules inside the root of the EAR
-    deploy project(':demo-ejb')
-    deploy project(path: ':demo-war', configuration: 'warArchive')
-
-    // Place the logging implementation and configuration in the EAR's lib directory
-    // so they are shared by the EJB and WAR modules at runtime
-    earlib libs.bundles.logging
-    earlib project(':demo-i18n')
-    earlib project(':demo-logging')
-}
-
-tasks.named('jar') {
-    enabled = false
-}
-
-ear {
-    // Set the Jakarta EE version for the application.xml deployment descriptor
-    deploymentDescriptor {
-        version = "11" 
-        
-        // Explicitly set the web context root so it matches our URL structure
-        webModule("demo-war-${project.version}.war", "/demo-ear-app")
-    }
-}
-
-tasks.register('deploy', Copy) {
-    dependsOn build			// Forces a fresh build before deploying
-    from ear.archiveFile	// Path to your local built EAR file
-    into '/opt/glassfish/glassfish8/glassfish/domains/jonathan/autodeploy'
-}
+import org.jspecify.annotations.NullMarked;

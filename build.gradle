@@ -2,7 +2,7 @@
  * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.3.0
+ * @version  0.1.0
  * @since    0.1.0
  *
  * MIT License
@@ -40,6 +40,8 @@
 plugins {
 	id 'java'
 	id 'net.jmp.gradle.plugin.projectinfo-info'	version '0.3.0'
+
+    alias(libs.plugins.errorprone) apply false
 }
 
 ext {
@@ -52,25 +54,81 @@ repositories {
 	mavenLocal()
 }
 
+allprojects {
+    configurations {
+        mockitoAgent {
+            transitive = false
+        }
+    }
+}
+
 subprojects {
     version = "${appVersion}"
 
     apply plugin: 'java'
+    apply plugin: 'net.ltgt.errorprone'
 
     repositories {
         mavenCentral()
+        mavenLocal()
     }
 
     dependencies {
         compileOnly libs.jakarta.jakartaee.api
+        compileOnly libs.org.jspecify.jspecify
+        compileOnly libs.bundles.logging
+
+        errorprone  libs.errorprone.core
+        errorprone  libs.nullaway
+
+        testImplementation	libs.bundles.testing
+        testImplementation	libs.jakarta.jakartaee.api
+
+        mockitoAgent 		libs.org.mockito.mockito.core
+
+        testRuntimeOnly		libs.ch.qos.logback.logback.classic
+        testRuntimeOnly		libs.org.glassfish.expressly.expressly
+        testRuntimeOnly		'org.junit.platform:junit-platform-launcher'
     }
-    
+
     tasks.compileJava {
         options.forkOptions.jvmArgs = ["-Xmx8192m", "--enable-native-access=ALL-UNNAMED"]
         options.release.set(25)
+        options.errorprone {
+            enabled = true
+            check("NullAway", net.ltgt.gradle.errorprone.CheckSeverity.ERROR)
+            option("NullAway:AnnotatedPackages", "net.jmp.demo.glassfish")
+        }
+    }
+
+    tasks.compileTestJava {
+        options.errorprone {
+            enabled = true
+            check("NullAway", net.ltgt.gradle.errorprone.CheckSeverity.OFF)
+        }
+    }
+
+    tasks.test {
+        useJUnitPlatform()
+
+        // Register a cache-compliant provider for JVM arguments
+
+        jvmArgumentProviders.add(new CommandLineArgumentProvider() {
+            @InputFiles
+            @PathSensitive(PathSensitivity.RELATIVE)
+            FileCollection agentFiles = configurations.mockitoAgent
+
+            @Override
+            Iterable<String> asArguments() {
+                if (agentFiles.isEmpty()) {
+                    return []
+                }
+
+                return ["-javaagent:${agentFiles.singleFile.absolutePath}"]
+            }
+        })
     }
 }
-
 
 java.sourceCompatibility = JavaVersion.VERSION_25
 
