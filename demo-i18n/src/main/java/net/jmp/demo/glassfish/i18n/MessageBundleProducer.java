@@ -1,9 +1,9 @@
+package net.jmp.demo.glassfish.i18n;
+
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)MessageBundleProducer.java    0.1.0   07/06/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,15 +28,24 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
+import jakarta.enterprise.context.ApplicationScoped;
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+import jakarta.enterprise.inject.Produces;
+
+import jakarta.inject.Named;
+
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+/// The message bundle producer class
+@ApplicationScoped
+public class MessageBundleProducer {
+    /// The get bundle method
+    ///
+    /// @return java.util.ResourceBundle
+    @Produces
+    @Named("messages")
+    public ResourceBundle getBundle() {
+        return ResourceBundle.getBundle("messages", Locale.getDefault());
     }
 }
-
-rootProject.name = 'Glassfish-EAR-Demo'
-
-include 'demo-ear', 'demo-ejb', 'demo-i18n', 'demo-logging', 'demo-war'

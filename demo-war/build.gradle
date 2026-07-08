@@ -1,5 +1,5 @@
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
  * @version  0.1.0
@@ -28,15 +28,40 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
+plugins {
+    id 'war'
+}
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
+configurations {
+    warArchive {
+        canBeConsumed = true
+        canBeResolved = false
     }
 }
 
-rootProject.name = 'Glassfish-EAR-Demo'
+dependencies {
+    // Compile against the EJB project, but don't bundle it inside the WAR's WEB-INF/lib
+    compileOnly project(':demo-ejb')
 
-include 'demo-ear', 'demo-ejb', 'demo-i18n', 'demo-logging', 'demo-war'
+    compileOnly libs.jakarta.servlet.jsp.jstl.api
+
+    runtimeOnly libs.glassfish.jakarta.servlet.jsp.jstl
+
+    testImplementation project(':demo-ejb')
+}
+
+artifacts {
+    warArchive tasks.named('war')
+}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+war {
+    def appVersion = project.version
+
+    filesMatching('WEB-INF/web.xml') {
+        expand(appVersion: appVersion)
+    }
+}

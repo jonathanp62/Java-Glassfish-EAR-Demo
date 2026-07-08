@@ -1,9 +1,10 @@
+@NullMarked
+package net.jmp.demo.glassfish.ejb.service;
+
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)package-info.java 0.1.0   07/04/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,15 +29,4 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
-
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
-}
-
-rootProject.name = 'Glassfish-EAR-Demo'
-
-include 'demo-ear', 'demo-ejb', 'demo-i18n', 'demo-logging', 'demo-war'
+import org.jspecify.annotations.NullMarked;

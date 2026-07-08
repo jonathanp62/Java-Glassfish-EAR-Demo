@@ -1,9 +1,9 @@
+package net.jmp.demo.glassfish.war.security;
+
 /*
- * (#)settings.gradle   0.1.0   07/03/2026
+ * (#)SecurityConfig.java   0.1.0   07/08/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
- * @since    0.1.0
  *
  * MIT License
  *
@@ -28,15 +28,27 @@
  * SOFTWARE.
  */
 
-// Gradle can't find custom plugins unless this is specified and it must be specified first
+import jakarta.enterprise.context.ApplicationScoped;
 
-pluginManagement {
-    repositories {
-        mavenLocal()
-        gradlePluginPortal()
-    }
+import jakarta.security.enterprise.authentication.mechanism.http.BasicAuthenticationMechanismDefinition;
+
+import jakarta.security.enterprise.identitystore.InMemoryIdentityStoreDefinition;
+
+/// The application security configuration class
+///
+/// Found a way to test the security configuration
+/// Using Safari, open a private window and navigate to a servlet
+/// Once the authentication has been made, close the private window,
+/// open a new one, then navigate to the same or a different servlet
+///
+@BasicAuthenticationMechanismDefinition(realmName = "demo-realm")
+@InMemoryIdentityStoreDefinition({
+        @InMemoryIdentityStoreDefinition.Credentials(
+                callerName = "jonathan",
+                password = "secret",
+                groups = {"user"}
+        )
+})
+@ApplicationScoped
+public class SecurityConfig {
 }
-
-rootProject.name = 'Glassfish-EAR-Demo'
-
-include 'demo-ear', 'demo-ejb', 'demo-i18n', 'demo-logging', 'demo-war'
