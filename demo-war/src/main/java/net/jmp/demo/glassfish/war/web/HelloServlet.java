@@ -28,10 +28,14 @@ package net.jmp.demo.glassfish.war.web;
  * SOFTWARE.
  */
 
+import jakarta.annotation.security.DeclareRoles;
+
 import jakarta.ejb.EJB;
 
 import jakarta.servlet.ServletException;
 
+import jakarta.servlet.annotation.HttpConstraint;
+import jakarta.servlet.annotation.ServletSecurity;
 import jakarta.servlet.annotation.WebServlet;
 
 import jakarta.servlet.http.HttpServlet;
@@ -52,6 +56,8 @@ import static net.jmp.util.logging.LoggerUtils.exit;
 
 /// The hello servlet class
 @WebServlet(urlPatterns = "/servlet/hello")
+@DeclareRoles("user")
+@ServletSecurity(@HttpConstraint(rolesAllowed = "user"))
 public class HelloServlet extends HttpServlet {
     /// The registration form JSP
     private static final String HELLO_JSP = "/WEB-INF/jsp/hello.jsp";
