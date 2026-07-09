@@ -1,10 +1,9 @@
 <%--
- (#)index.jsp   0.2.0   07/09/2026
- (#)index.jsp   0.1.0   07/04/2026
+ (#)cars.jsp    0.2.0   07/09/2026
 
  @author   Jonathan Parker
  @version  0.2.0
- @since    0.1.0
+ @since    0.2.0
 
  MIT License
 
@@ -35,14 +34,36 @@
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title><fmt:message key="jsp.index.title" /></title>
-        <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
-    </head>
-    <body>
-        <h2><fmt:message key="jsp.index.title" /></h2>
-        <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
-        <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
-        <p>Version: <c:out value="${initParam.appVersion}" /></p>
-    </body>
+  <head>
+    <title><fmt:message key="jsp.cars.title" /></title>
+    <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
+  </head>
+  <body>
+    <h2><fmt:message key="jsp.cars.title" /></h2>
+
+    <table>
+      <thead>
+      <tr>
+        <th><fmt:message key="jsp.cars.id" /></th>
+        <th><fmt:message key="jsp.cars.year" /></th>
+        <th><fmt:message key="jsp.cars.make" /></th>
+        <th><fmt:message key="jsp.cars.model" /></th>
+        <th><fmt:message key="jsp.cars.color" /></th>
+        <th><fmt:message key="jsp.cars.style" /></th>
+      </tr>
+      </thead>
+      <tbody>
+        <c:forEach var="car" items="${requestScope.cars}">
+          <tr>
+            <td style="text-align: center;"><c:out value="${car.id}" /></td>
+            <td style="text-align: center;"><c:out value="${car.year}" /></td>
+            <td style="text-align: center;"><c:out value="${car.make}" /></td>
+            <td style="text-align: center;"><c:out value="${car.model}" /></td>
+            <td style="text-align: center;"><c:out value="${car.color}" /></td>
+            <td style="text-align: center;"><c:out value="${car.style}" /></td>
+          </tr>
+        </c:forEach>
+      </tbody>
+    </table>
+  </body>
 </html>

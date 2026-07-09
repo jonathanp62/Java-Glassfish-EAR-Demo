@@ -1,10 +1,11 @@
-<%--
- (#)index.jsp   0.2.0   07/09/2026
- (#)index.jsp   0.1.0   07/04/2026
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ (#)persistence.xml 0.2.0   07/09/2026
 
  @author   Jonathan Parker
  @version  0.2.0
- @since    0.1.0
+ @since    0.2.0
 
  MIT License
 
@@ -27,22 +28,16 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
---%>
+-->
 
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title><fmt:message key="jsp.index.title" /></title>
-        <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
-    </head>
-    <body>
-        <h2><fmt:message key="jsp.index.title" /></h2>
-        <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
-        <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
-        <p>Version: <c:out value="${initParam.appVersion}" /></p>
-    </body>
-</html>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+    <persistence-unit name="DemoPU" transaction-type="JTA">
+        <jta-data-source>jdbc/sqlite</jta-data-source>
+        <properties>
+            <property name="jakarta.persistence.schema-generation.database.action" value="create"/>
+            <property name="eclipselink.logging.level" value="FINE"/>
+        </properties>
+    </persistence-unit>
+</persistence>
