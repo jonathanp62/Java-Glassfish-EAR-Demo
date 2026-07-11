@@ -55,7 +55,7 @@ public class RegistrationService {
     private JMSContext jmsContext;
 
     /// The JMS queue
-    @Resource(lookup = "jms/DemoQueue")
+    @Resource(lookup = "java:global/jms/DemoQueue")
     @SuppressWarnings("NullAway")
     private Queue demoQueue;
 

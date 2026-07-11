@@ -31,6 +31,7 @@ package net.jmp.demo.glassfish.ejb.message;
 import jakarta.ejb.ActivationConfigProperty;
 import jakarta.ejb.MessageDriven;
 
+import jakarta.jms.JMSDestinationDefinition;
 import jakarta.jms.JMSException;
 import jakarta.jms.Message;
 import jakarta.jms.MessageListener;
@@ -43,9 +44,14 @@ import static net.jmp.util.logging.LoggerUtils.entryWith;
 import static net.jmp.util.logging.LoggerUtils.exit;
 
 /// The message-driven bean that handles registration messages
+@JMSDestinationDefinition(
+        name = "java:global/jms/DemoQueue",
+        interfaceName = "jakarta.jms.Queue",
+        destinationName = "DemoQueue"
+)
 @MessageDriven(activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "jakarta.jms.Queue"),
-        @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "jms/DemoQueue")
+        @ActivationConfigProperty(propertyName = "destinationLookup", propertyValue = "java:global/jms/DemoQueue")
 })
 public class RegistrationMessageBean implements MessageListener {
     // Initialize the SLF4J Logger
