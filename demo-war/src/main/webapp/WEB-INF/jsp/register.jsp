@@ -1,10 +1,9 @@
 <%--
- (#)index.jsp   0.2.0   07/09/2026
- (#)index.jsp   0.1.0   07/04/2026
+ (#)register.jsp    0.2.0   07/11/2026
 
  @author   Jonathan Parker
  @version  0.2.0
- @since    0.1.0
+ @since    0.2.0
 
  MIT License
 
@@ -36,17 +35,21 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title><fmt:message key="jsp.index.title" /></title>
+        <title><fmt:message key="jsp.register.title" /></title>
         <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
+        <script src="${pageContext.request.contextPath}/static/js/global.js"></script>
     </head>
     <body>
-        <h2><fmt:message key="jsp.index.title" /></h2>
-        <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
-        <p><a href="<c:url value='/servlet/form' />"><fmt:message key="jsp.index.form.demo" /></a></p>
-        <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
-        <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>
-        <p><a href="<c:url value='/servlet/projects' />"><fmt:message key="jsp.index.projects" /></a></p>
-        <p><a href="<c:url value='/servlet/register' />"><fmt:message key="jsp.index.register" /></a></p>
-        <p>Version: <c:out value="${initParam.appVersion}" /></p>
+        <h2><fmt:message key="jsp.register.title" /></h2>
+
+        <form method="post" action="<c:url value='/servlet/register' />">
+            <p>
+                <label for="email"><fmt:message key="jsp.register.email" /></label><br />
+                <input id="email" name="email" type="text" value="<c:out value='${requestScope.email}' />" />
+            </p>
+            <p>
+                <button type="submit"><fmt:message key="jsp.register.submit" /></button>
+            </p>
+        </form>
     </body>
 </html>
