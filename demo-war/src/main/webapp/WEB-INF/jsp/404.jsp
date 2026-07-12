@@ -1,10 +1,9 @@
 <%--
- (#)index.jsp   0.2.0   07/09/2026
- (#)index.jsp   0.1.0   07/04/2026
+ (#)404.jsp   0.2.0   07/09/2026
 
  @author   Jonathan Parker
  @version  0.2.0
- @since    0.1.0
+ @since    0.2.0
 
  MIT License
 
@@ -31,22 +30,20 @@
 
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" isErrorPage="true" %>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+    <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title><fmt:message key="jsp.index.title" /></title>
+        <title><fmt:message key="jsp.404.title" /></title>
         <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
     </head>
     <body>
-        <h2><fmt:message key="jsp.index.title" /></h2>
-        <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
-        <p><a href="<c:url value='/servlet/form' />"><fmt:message key="jsp.index.form.demo" /></a></p>
-        <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
-        <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>
-        <p><a href="<c:url value='/servlet/projects' />"><fmt:message key="jsp.index.projects" /></a></p>
-        <p><a href="<c:url value='/servlet/register' />"><fmt:message key="jsp.index.register" /></a></p>
-        <p>Version: <c:out value="${initParam.appVersion}" /></p>
+        <h2><fmt:message key="jsp.404.title" /></h2>
+        <h3><fmt:message key="jsp.404.message" /></h3>
+
+        <c:if test="${not empty pageContext.errorData}">
+            <p><strong><fmt:message key="word.path" />:</strong> <c:out value="${pageContext.errorData.requestURI}" /></p>
+        </c:if>
     </body>
 </html>
