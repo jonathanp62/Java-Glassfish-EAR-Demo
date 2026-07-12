@@ -1,7 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)RegistrationServlet.java  0.2.0   07/11/2026
+ * (#)FormServlet.java  0.2.0   07/12/2026
  *
  * @author   Jonathan Parker
  *
@@ -30,6 +30,8 @@ package net.jmp.demo.glassfish.war.web;
 
 import jakarta.annotation.security.DeclareRoles;
 
+import jakarta.ejb.EJB;
+
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -52,16 +54,15 @@ import java.io.IOException;
 
 import java.io.UnsupportedEncodingException;
 
-import java.text.MessageFormat;
-
 import java.util.List;
-import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Set;
 
-import net.jmp.demo.glassfish.war.dto.RegistrationData;
+import net.jmp.demo.glassfish.ejb.dto.Person;
 
-import net.jmp.demo.glassfish.ejb.service.RegistrationService;
+import net.jmp.demo.glassfish.ejb.service.PeopleService;
+
+import net.jmp.demo.glassfish.war.dto.FormData;
 
 import net.jmp.demo.glassfish.war.util.StringUtils;
 
@@ -70,57 +71,56 @@ import org.slf4j.LoggerFactory;
 
 import static net.jmp.util.logging.LoggerUtils.*;
 
-/// The registration servlet class
-@WebServlet(urlPatterns = "/servlet/register")
+/// The form servlet class
+@WebServlet(urlPatterns = "/servlet/form")
 @DeclareRoles("user")
 @ServletSecurity(@HttpConstraint(rolesAllowed = "user"))
-public class RegistrationServlet extends HttpServlet {
+public class FormServlet extends HttpServlet {
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /// The messages resource bundle
     private final transient ResourceBundle bundle;
 
-    /// The registration service
-    private final transient RegistrationService registrationService;
-
     /// The input validator
     private final transient Validator validator;
 
-    /// The registration form JSP
-    private static final String REGISTER_JSP = "/WEB-INF/jsp/register.jsp";
+    /// The people service
+    @EJB
+    @SuppressWarnings("NullAway")
+    private transient PeopleService peopleService;
 
-    /// The registration successful JSP
-    private static final String REGISTERED_JSP = "/WEB-INF/jsp/registered.jsp";
+    /// The form JSP
+    private static final String FORM_JSP = "/WEB-INF/jsp/form.jsp";
 
     /// The constructor
     ///
     /// @param  bundle  java.util.ResourceBundle
     @Inject
-    public RegistrationServlet(@Named("messages") final ResourceBundle bundle, final RegistrationService registrationService) {
+    public FormServlet(@Named("messages") final ResourceBundle bundle) {
         super();
 
+        this.bundle = bundle;
+
         try (final ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            this.bundle = bundle;
-            this.registrationService = registrationService;
             this.validator = factory.getValidator();
         }
     }
 
     /// Constructor for testing
     ///
-    /// @param  bundle              java.util.ResourceBundle
-    /// @param  registrationService net.jmp.demo.glassfish.ejb.service.RegistrationService
-    /// @param  validator           jakarta.validation.Validator
-    RegistrationServlet(@Named("messages") final ResourceBundle bundle, final RegistrationService registrationService, final Validator validator) {
+    /// @param  bundle          java.util.ResourceBundle
+    /// @param  peopleService   net.jmp.demo.glassfish.ejb.service.PeopleService
+    /// @param  validator       jakarta.validation.Validator
+    FormServlet(final ResourceBundle bundle, final PeopleService peopleService, final Validator validator) {
         super();
 
         this.bundle = bundle;
-        this.registrationService = registrationService;
+        this.peopleService = peopleService;
         this.validator = validator;
     }
 
-    /// The GET method. Called from /servlet/register.
+    /// The GET method. Called from /servlet/form.
     ///
     /// @param  request     jakarta.servlet.http.HttpServletRequest
     /// @param  response    jakarta.servlet.http.HttpServletResponse
@@ -132,7 +132,7 @@ public class RegistrationServlet extends HttpServlet {
             this.logger.trace(entryWith(request, response));
         }
 
-        request.getRequestDispatcher(REGISTER_JSP).forward(request, response);
+        request.getRequestDispatcher(FORM_JSP).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
@@ -158,21 +158,35 @@ public class RegistrationServlet extends HttpServlet {
             throw new ServletException(uee);
         }
 
+        final String name = StringUtils.trimToNull(request.getParameter("name"));
         final String email = StringUtils.trimToNull(request.getParameter("email"));
+        final String comment = StringUtils.trimToNull(request.getParameter("comment"));
 
-        final RegistrationData registrationData = new RegistrationData(email);
-        final Set<ConstraintViolation<RegistrationData>> violations = this.validator.validate(registrationData);
+        final FormData formData = new FormData(name, email, comment);
+        final Set<ConstraintViolation<FormData>> violations = this.validator.validate(formData);
 
+        request.setAttribute("name", name);
         request.setAttribute("email", email);
+        request.setAttribute("comment", comment);
 
         if (violations.isEmpty()) {
-            final String nonNullEmail = Objects.requireNonNull(email, "email");
-            final String pattern = this.bundle.getString("servlet.registration.success");
-            final String successMessage = MessageFormat.format(pattern, nonNullEmail);
+            request.setAttribute("successMessage", this.bundle.getString("servlet.form.success"));
 
-            this.registrationService.register(nonNullEmail);
+            final Person person = new Person();
 
-            request.setAttribute("successMessage", successMessage);
+            if (comment != null) {
+                person.setComment(comment);
+            }
+
+            if (email != null) {
+                person.setEmail(email);
+            }
+
+            if (name != null) {
+                person.setName(name);
+            }
+
+            this.peopleService.save(person);
         } else {
             final List<String> errors = violations.stream()
                     .map(ConstraintViolation::getMessage)
@@ -181,7 +195,7 @@ public class RegistrationServlet extends HttpServlet {
             request.setAttribute("errors", errors);
         }
 
-        request.getRequestDispatcher(REGISTERED_JSP).forward(request, response);
+        request.getRequestDispatcher(FORM_JSP).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
