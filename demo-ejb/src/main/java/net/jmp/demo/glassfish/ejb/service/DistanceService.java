@@ -71,6 +71,7 @@ public class DistanceService {
     /// Constructor for testing
     ///
     /// @param  mongoDatabase   com.mongodb.client.MongoDatabase
+    @SuppressWarnings("UnnecessaryAssignment")
     DistanceService(final MongoDatabase mongoDatabase) {
         this.mongoDatabase = mongoDatabase;
     }
