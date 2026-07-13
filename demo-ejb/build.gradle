@@ -1,8 +1,9 @@
 /*
+ * (#)build.gradle  0.3.0   07/12/2026
  * (#)build.gradle  0.1.0   07/03/2026
  *
  * @author   Jonathan Parker
- * @version  0.1.0
+ * @version  0.3.0
  * @since    0.1.0
  *
  * MIT License
@@ -29,3 +30,7 @@
  */
 
 // Just inherit everything from the parent
+
+dependencies {
+    implementation(libs.org.mongodb.mongodb.driver.sync)
+}
