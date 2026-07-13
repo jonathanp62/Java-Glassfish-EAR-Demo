@@ -1,9 +1,10 @@
 <%--
+ (#)index.jsp   0.3.0   07/12/2026
  (#)index.jsp   0.2.0   07/09/2026
  (#)index.jsp   0.1.0   07/04/2026
 
  @author   Jonathan Parker
- @version  0.2.0
+ @version  0.3.0
  @since    0.1.0
 
  MIT License
@@ -42,6 +43,7 @@
     <body>
         <h2><fmt:message key="jsp.index.title" /></h2>
         <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
+        <p><a href="<c:url value='/servlet/distance' />"><fmt:message key="jsp.index.distance" /></a></p>
         <p><a href="<c:url value='/servlet/form' />"><fmt:message key="jsp.index.form.demo" /></a></p>
         <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
         <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>

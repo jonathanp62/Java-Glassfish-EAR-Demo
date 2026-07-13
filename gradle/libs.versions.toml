@@ -1,8 +1,9 @@
 #
+# (#)libs.versions.toml 0.3.0   07/12/2026
 # (#)libs.versions.toml 0.1.0   07/03/2026
 #
 #  @author   Jonathan Parker
-#  @version  0.1.0
+#  @version  0.3.0
 #  @since    0.1.0
 #
 #  MIT License
@@ -41,6 +42,7 @@ org-jspecify-jspecify = "1.0.0"
 org-junit-jupiter-junit-jupiter = "6.1.0"
 org-mockito-mockito-core = "5.23.0"
 org-mockito-mockito-junit-jupiter = "5.23.0"
+org-mongodb-mongodb-driver-sync = "5.8.0"
 org-slf4j-slf4j-api = "2.0.18"
 
 [libraries]
@@ -56,6 +58,7 @@ org-jspecify-jspecify = { module = "org.jspecify:jspecify", version.ref = "org-j
 org-junit-jupiter-junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "org-junit-jupiter-junit-jupiter" }
 org-mockito-mockito-core = { module = "org.mockito:mockito-core", version.ref = "org-mockito-mockito-core" }
 org-mockito-mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter", version.ref = "org-mockito-mockito-junit-jupiter" }
+org-mongodb-mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "org-mongodb-mongodb-driver-sync" }
 org-slf4j-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "org-slf4j-slf4j-api" }
 
 [bundles]
