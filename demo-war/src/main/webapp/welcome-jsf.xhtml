@@ -34,9 +34,9 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="jakarta.faces.html">
     <h:head>
-        <title>Welcome to JSF</title>
+        <title><h:outputText value="#{msg['jsf.welcome.jsf.title']}" /></title>
     </h:head>
     <h:body>
-        <h:outputText value="Welcome to Java Server Faces 4.0" />
+        <h:outputText value="#{msg['jsf.welcome.jsf.message']}" />
     </h:body>
 </html>
