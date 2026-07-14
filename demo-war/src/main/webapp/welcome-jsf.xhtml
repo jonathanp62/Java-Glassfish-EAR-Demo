@@ -35,6 +35,7 @@
       xmlns:h="jakarta.faces.html">
     <h:head>
         <title><h:outputText value="#{msg['jsf.welcome.jsf.title']}" /></title>
+        <link rel="stylesheet" href="#{facesContext.externalContext.requestContextPath}/static/css/styles.css" />
     </h:head>
     <h:body>
         <h:outputText value="#{msg['jsf.welcome.jsf.message']}" />
