@@ -39,6 +39,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <title><fmt:message key="jsp.index.title" /></title>
+        <%-- The stylesheet can also be accessed at /resources/css/styles.css --%>
         <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
     </head>
     <body>
@@ -50,7 +51,7 @@
         <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>
         <p><a href="<c:url value='/servlet/projects' />"><fmt:message key="jsp.index.projects" /></a></p>
         <p><a href="<c:url value='/servlet/register' />"><fmt:message key="jsp.index.register" /></a></p>
-        <p><a href="<c:url value='/welcome-jsf.xhtml' />"><fmt:message key="jsp.index.welcome.jsf" /></a></p>
+        <p><a href="<c:url value='/servlet/welcome-jsf' />"><fmt:message key="jsp.index.welcome.jsf" /></a></p>
         <p>Version: <c:out value="${initParam.appVersion}" /></p>
     </body>
 </html>

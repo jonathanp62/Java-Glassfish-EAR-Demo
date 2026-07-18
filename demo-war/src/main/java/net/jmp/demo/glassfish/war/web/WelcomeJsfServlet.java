@@ -1,7 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)HelloServlet.java 0.1.0   07/04/2026
+ * (#)WelcomeJsfServlet.java    0.4.0   07/18/2026
  *
  * @author   Jonathan Parker
  *
@@ -30,8 +30,6 @@ package net.jmp.demo.glassfish.war.web;
 
 import jakarta.annotation.security.DeclareRoles;
 
-import jakarta.ejb.EJB;
-
 import jakarta.servlet.ServletException;
 
 import jakarta.servlet.annotation.HttpConstraint;
@@ -44,31 +42,22 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-import net.jmp.demo.glassfish.ejb.service.HelloService;
-
-import org.jspecify.annotations.Nullable;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static net.jmp.util.logging.LoggerUtils.entryWith;
 import static net.jmp.util.logging.LoggerUtils.exit;
 
-/// The hello servlet class
-@WebServlet(urlPatterns = "/servlet/hello")
+/// The welcome to JSF servlet class
+@WebServlet(urlPatterns = "/servlet/welcome-jsf")
 @DeclareRoles("user")
 @ServletSecurity(@HttpConstraint(rolesAllowed = "user"))
-public class HelloServlet extends HttpServlet {
-    /// The hello JSP
-    private static final String HELLO_JSP = "/WEB-INF/jsp/hello.jsp";
+public class WelcomeJsfServlet extends HttpServlet {
+    /// The welcome to JSF page
+    private static final String WELCOME_JSF = "/WEB-INF/jsf/welcome-jsf.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    /// The hello service
-    @EJB
-    private transient @Nullable HelloService helloService;
-
     /// The GET method
     ///
     /// @param  request     jakarta.servlet.http.HttpServletRequest
@@ -81,14 +70,7 @@ public class HelloServlet extends HttpServlet {
             this.logger.trace(entryWith(request, response));
         }
 
-        if (this.helloService == null) {
-            throw new ServletException("HelloService has not been injected");
-        }
-
-        final String greeting = this.helloService.hello("Jonathan");
-
-        request.setAttribute("greeting", greeting);
-        request.getRequestDispatcher(HELLO_JSP).forward(request, response);
+        request.getRequestDispatcher(WELCOME_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
