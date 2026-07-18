@@ -68,7 +68,7 @@ class TestCarServlet {
         final List<Car> cars = List.of(car);
 
         when(carService.getAll()).thenReturn(cars);
-        when(request.getRequestDispatcher("/WEB-INF/jsp/cars.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/cars.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

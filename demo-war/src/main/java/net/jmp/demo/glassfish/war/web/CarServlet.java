@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)CarServlet.java   0.4.0   07/18/2026
  * (#)CarServlet.java   0.2.0   07/09/2026
  *
  * @author   Jonathan Parker
@@ -62,8 +63,8 @@ public class CarServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The cars JSP
-    private static final String CARS_JSP = "/WEB-INF/jsp/cars.jsp";
+    /// The cars JSF
+    private static final String CARS_JSF = "/WEB-INF/jsf/cars.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -100,7 +101,7 @@ public class CarServlet extends HttpServlet {
         }
 
         request.setAttribute("cars", this.carService.getAll());
-        request.getRequestDispatcher(CARS_JSP).forward(request, response);
+        request.getRequestDispatcher(CARS_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
