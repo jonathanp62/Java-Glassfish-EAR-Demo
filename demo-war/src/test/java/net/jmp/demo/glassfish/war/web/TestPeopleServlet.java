@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)TestPeopleServlet.java 0.4.0   07/21/2026
  * (#)TestPeopleServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -66,7 +67,7 @@ class TestPeopleServlet {
         final List<Person> people = List.of(person);
 
         when(peopleService.getAll()).thenReturn(people);
-        when(request.getRequestDispatcher("/WEB-INF/jsp/people.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/people.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

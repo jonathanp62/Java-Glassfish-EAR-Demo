@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <!--
-  (#)cars.xhtml 0.4.0   07/18/2026
+  (#)people.xhtml 0.4.0   07/21/2026
 
   @author   Jonathan Parker
   @version  0.4.0
-  @since    0.4.0
+  @since    0.2.0
 
   MIT License
 
@@ -34,36 +34,28 @@
       xmlns:h="jakarta.faces.html">
     <f:view>
         <h:head>
-            <title><h:outputText value="#{msg['jsp.cars.title']}" /></title>
+            <title><h:outputText value="#{msg['jsp.people.title']}" /></title>
             <h:outputStylesheet name="css/styles.css" />
         </h:head>
         <h:body>
-            <h2><h:outputText value="#{msg['jsp.cars.title']}" /></h2>
+            <h2><h:outputText value="#{msg['jsp.people.title']}" /></h2>
 
-            <h:dataTable value="#{requestScope.cars}" var="car">
+            <h:dataTable value="#{requestScope.people}" var="person">
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.id']}" /></f:facet>
-                    <h:outputText value="#{car.id}" style="display:block; text-align:center;" />
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.id']}" /></f:facet>
+                    <h:outputText value="#{person.id}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.year']}" /></f:facet>
-                    <h:outputText value="#{car.year}" style="display:block; text-align:center;" />
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.name']}" /></f:facet>
+                    <h:outputText value="#{person.name}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.make']}" /></f:facet>
-                    <h:outputText value="#{car.make}" style="display:block; text-align:center;" />
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.email']}" /></f:facet>
+                    <h:outputText value="#{person.email}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.model']}" /></f:facet>
-                    <h:outputText value="#{car.model}" style="display:block; text-align:center;" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.color']}" /></f:facet>
-                    <h:outputText value="#{car.color}" style="display:block; text-align:center;" />
-                </h:column>
-                <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.cars.style']}" /></f:facet>
-                    <h:outputText value="#{car.style}" style="display:block; text-align:center;" />
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.comment']}" /></f:facet>
+                    <h:outputText value="#{person.comment}" style="display:block; text-align:center;" />
                 </h:column>
             </h:dataTable>
         </h:body>
