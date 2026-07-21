@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)HelloServlet.java 0.4.0   07/21/2026
  * (#)HelloServlet.java 0.1.0   07/04/2026
  *
  * @author   Jonathan Parker
@@ -59,8 +60,8 @@ import static net.jmp.util.logging.LoggerUtils.exit;
 @DeclareRoles("user")
 @ServletSecurity(@HttpConstraint(rolesAllowed = "user"))
 public class HelloServlet extends HttpServlet {
-    /// The hello JSP
-    private static final String HELLO_JSP = "/WEB-INF/jsp/hello.jsp";
+    /// The hello JSF
+    private static final String HELLO_JSF = "/WEB-INF/jsf/hello.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -88,7 +89,7 @@ public class HelloServlet extends HttpServlet {
         final String greeting = this.helloService.hello("Jonathan");
 
         request.setAttribute("greeting", greeting);
-        request.getRequestDispatcher(HELLO_JSP).forward(request, response);
+        request.getRequestDispatcher(HELLO_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
