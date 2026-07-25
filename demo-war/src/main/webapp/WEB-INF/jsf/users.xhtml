@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<!--
+  (#)users.xhtml 0.4.0   07/25/2026
+
+  @author   Jonathan Parker
+  @version  0.4.0
+  @since    0.2.0
+
+  MIT License
+
+  Copyright (c) 2026 Jonathan M. Parker
+
+  Permission is hereby granted, free of charge, to any person obtaining a copy
+  of this software and associated documentation files (the "Software"), to deal
+  in the Software without restriction, including without limitation the rights
+  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  copies of the Software, and to permit persons to whom the Software is
+  furnished to do so, subject to the following conditions:
+
+  The above copyright notice and this permission notice shall be included in all
+  copies or substantial portions of the Software.
+
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+-->
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:f="jakarta.faces.core"
+      xmlns:h="jakarta.faces.html">
+    <f:view>
+        <h:head>
+            <title><h:outputText value="#{msg['jsp.users.title']}" /></title>
+            <h:outputStylesheet name="css/styles.css" />
+        </h:head>
+        <h:body>
+            <h2>
+                <h:outputText value="#{msg['jsp.users.title']}" />
+                <h:outputText value=" #{requestScope.projectId}" />
+            </h2>
+
+            <h:dataTable value="#{requestScope.users}" var="u">
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.userId']}" /></f:facet>
+                    <h:outputText value="#{u.userId}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.firstName']}" /></f:facet>
+                    <h:outputText value="#{u.firstName}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.lastName']}" /></f:facet>
+                    <h:outputText value="#{u.lastName}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.email']}" /></f:facet>
+                    <h:outputText value="#{u.email}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.age']}" /></f:facet>
+                    <h:outputText value="#{u.age}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.role']}" /></f:facet>
+                    <h:outputText value="#{u.role}" style="display:block; text-align:center;" />
+                </h:column>
+                <h:column>
+                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.createdAt']}" /></f:facet>
+                    <h:outputText value="#{u.createdAt}" style="display:block; text-align:center;">
+                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
+                    </h:outputText>
+                </h:column>
+            </h:dataTable>
+        </h:body>
+    </f:view>
+</html>

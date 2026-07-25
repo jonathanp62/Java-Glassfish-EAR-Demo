@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)TestUsersServlet.java 0.4.0   07/25/2026
  * (#)TestUsersServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -74,7 +75,7 @@ class TestUsersServlet {
 
         when(request.getParameter("projectId")).thenReturn("1");
         when(userService.getForProject(projectId)).thenReturn(users);
-        when(request.getRequestDispatcher("/WEB-INF/jsp/users.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/users.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

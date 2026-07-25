@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)ProjectsServlet.java 0.4.0   07/25/2026
  * (#)ProjectsServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -61,8 +62,8 @@ public class ProjectsServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The projects JSP
-    private static final String PROJECTS_JSP = "/WEB-INF/jsp/projects.jsp";
+    /// The projects JSF
+    private static final String PROJECTS_JSF = "/WEB-INF/jsf/projects.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -97,7 +98,7 @@ public class ProjectsServlet extends HttpServlet {
         }
 
         request.setAttribute("projects", this.projectService.getAll());
-        request.getRequestDispatcher(PROJECTS_JSP).forward(request, response);
+        request.getRequestDispatcher(PROJECTS_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());

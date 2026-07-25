@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)UsersServlet.java 0.4.0   07/25/2026
  * (#)UsersServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -45,6 +46,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import net.jmp.demo.glassfish.ejb.service.UserService;
 
 import org.jspecify.annotations.Nullable;
@@ -63,8 +67,8 @@ public class UsersServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The users JSP
-    private static final String USERS_JSP = "/WEB-INF/jsp/users.jsp";
+    /// The users JSF
+    private static final String USERS_JSF = "/WEB-INF/jsf/users.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -103,7 +107,7 @@ public class UsersServlet extends HttpServlet {
         if (projectId != null) {
             request.setAttribute("projectId", projectId);
             request.setAttribute("users", this.userService.getForProject(projectId));
-            request.getRequestDispatcher(USERS_JSP).forward(request, response);
+            request.getRequestDispatcher(USERS_JSF).forward(request, response);
         } else {
             throw new ServletException("Project ID is null or invalid");
         }
@@ -122,18 +126,28 @@ public class UsersServlet extends HttpServlet {
             this.logger.trace(entryWith(request));
         }
 
-        Integer projectId = null;
+        /*
+         * Create a registry of project ID handlers
+         * This is for demonstration only and is quite
+         * inappropriate for a production application
+         */
+
+        final ProjectIdRegistry registry = new ProjectIdRegistry();
+
+        registry.register("Null", new NullProjectIdHandler());
+        registry.register("Blank", new BlankProjectIdHandler());
+        registry.register("String", new StringProjectIdHandler());
+
+        Integer projectId;
 
         final String projectIdParam = request.getParameter("projectId");
 
-        if (projectIdParam == null || projectIdParam.isBlank()) {
-            this.logger.error("Required request parameter 'projectId' is missing or blank");
+        if (projectIdParam == null) {
+            projectId = registry.getHandler("Null").handle(projectIdParam, this.logger);
+        } else if (projectIdParam.isBlank()) {
+            projectId = registry.getHandler("Blank").handle(projectIdParam, this.logger);
         } else {
-            try {
-                projectId = Integer.valueOf(projectIdParam);
-            } catch (final NumberFormatException e) {
-                this.logger.error("Invalid 'projectId' request parameter: {}", projectIdParam, e);
-            }
+            projectId = registry.getHandler("String").handle(projectIdParam, this.logger);
         }
 
         if (this.logger.isTraceEnabled()) {
@@ -141,5 +155,96 @@ public class UsersServlet extends HttpServlet {
         }
 
         return projectId;
+    }
+
+    /// The project ID handler interface
+    interface ProjectIdHandler {
+        /// Handle the project ID
+        ///
+        /// @param  projectId java.lang.String
+        /// @param  logger    org.slf4j.Logger
+        /// @return           java.lang.Integer
+        @Nullable Integer handle(final @Nullable String projectId, final Logger logger);
+    }
+
+    /// The null project ID handler
+    static class NullProjectIdHandler implements ProjectIdHandler {
+        /// Handle a null project ID
+        ///
+        /// @param  projectId java.lang.String
+        /// @param  logger    org.slf4j.Logger
+        /// @return           java.lang.Integer
+        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
+            logger.error("Required request parameter 'projectId' is missing");
+
+            return null;
+        }
+    }
+
+    /// The blank project ID handler
+    static class BlankProjectIdHandler implements ProjectIdHandler {
+        /// Handle a blank project ID
+        ///
+        /// @param  projectId java.lang.String
+        /// @param  logger    org.slf4j.Logger
+        /// @return           java.lang.Integer
+        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
+            logger.error("Required request parameter 'projectId' is blank");
+
+            return null;
+        }
+    }
+
+    /// The string project ID handler
+    static class StringProjectIdHandler implements ProjectIdHandler {
+        /// Handle a string project ID
+        ///
+        /// @param  projectId java.lang.String
+        /// @param  logger    org.slf4j.Logger
+        /// @return           java.lang.Integer
+        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
+            Integer value = null;
+
+            if (projectId == null) {
+                logger.error("'projectId' request parameter is null");
+                return null;
+            }
+
+            try {
+                value = Integer.valueOf(projectId);
+            } catch (final NumberFormatException e) {
+                logger.error("Invalid 'projectId' request parameter: {}", projectId, e);
+            }
+
+            return value;
+        }
+    }
+
+    /// The project ID registry
+    static class ProjectIdRegistry {
+        /// The handlers
+        private final Map<String, ProjectIdHandler> handlers = new HashMap<>();
+
+        /// Register a type with a hdnler
+        ///
+        /// @param  type    java.lang.String
+        /// @param  handler net.jmp.demo.glassfish.war.web.UsersServlet.ProjectIdHandler
+        public void register(final String type, final ProjectIdHandler handler) {
+            handlers.put(type.toUpperCase(), handler);
+        }
+
+        /// Get a handler by type
+        ///
+        /// @param  type    java.lang.String
+        /// @return         net.jmp.demo.glassfish.war.web.UsersServlet.ProjectIdHandler
+        public ProjectIdHandler getHandler(final String type) {
+            ProjectIdHandler handler = handlers.get(type.toUpperCase());
+
+            if (handler == null) {
+                throw new IllegalArgumentException("Unsupported type: " + type);
+            }
+
+            return handler;
+        }
     }
 }
