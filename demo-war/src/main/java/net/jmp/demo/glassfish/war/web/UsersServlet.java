@@ -46,8 +46,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import net.jmp.demo.glassfish.ejb.service.UserService;
 
@@ -102,14 +104,14 @@ public class UsersServlet extends HttpServlet {
             this.logger.trace(entryWith(request, response));
         }
 
-        final Integer projectId = this.readProjectId(request);
+        final @Nullable Integer projectId = this.readProjectId(request);
 
         if (projectId != null) {
             request.setAttribute("projectId", projectId);
             request.setAttribute("users", this.userService.getForProject(projectId));
             request.getRequestDispatcher(USERS_JSF).forward(request, response);
         } else {
-            throw new ServletException("Project ID is null or invalid");
+            throw new ServletException("Project ID is null, blank or invalid");
         }
 
         if (this.logger.isTraceEnabled()) {
@@ -126,29 +128,46 @@ public class UsersServlet extends HttpServlet {
             this.logger.trace(entryWith(request));
         }
 
-        /*
-         * Create a registry of project ID handlers
-         * This is for demonstration only and is quite
-         * inappropriate for a production application
-         */
+        // Registry taking a String input and returning an Integer
 
-        final ProjectIdRegistry registry = new ProjectIdRegistry();
+        final EvaluationRegistry<String, Integer> registry = new EvaluationRegistry<>();
 
-        registry.register("Null", new NullProjectIdHandler());
-        registry.register("Blank", new BlankProjectIdHandler());
-        registry.register("String", new StringProjectIdHandler());
+        // Register the rules
 
-        Integer projectId;
+        registry.registerRule(
+                val -> val == null,
+                val -> {
+                    this.logger.error("Required request parameter 'projectId' is missing");
 
-        final String projectIdParam = request.getParameter("projectId");
+                    return null;
+                }
+        );
 
-        if (projectIdParam == null) {
-            projectId = registry.getHandler("Null").handle(projectIdParam, this.logger);
-        } else if (projectIdParam.isBlank()) {
-            projectId = registry.getHandler("Blank").handle(projectIdParam, this.logger);
-        } else {
-            projectId = registry.getHandler("String").handle(projectIdParam, this.logger);
-        }
+        registry.registerRule(
+                String::isBlank,
+                val -> {
+                    logger.error("Required request parameter 'projectId' is blank");
+
+                    return null;
+                }
+        );
+
+        registry.registerRule(
+                val -> !val.isBlank(),
+                val -> {
+                    Integer value = null;
+
+                    try {
+                        value = Integer.valueOf(val);
+                    } catch (final NumberFormatException e) {
+                        logger.error("Invalid 'projectId' request parameter: {}", val, e);
+                    }
+
+                    return value;
+                }
+        );
+
+        final Integer projectId = registry.evaluate(request.getParameter("projectId"));
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(projectId));
@@ -157,94 +176,34 @@ public class UsersServlet extends HttpServlet {
         return projectId;
     }
 
-    /// The project ID handler interface
-    interface ProjectIdHandler {
-        /// Handle the project ID
-        ///
-        /// @param  projectId java.lang.String
-        /// @param  logger    org.slf4j.Logger
-        /// @return           java.lang.Integer
-        @Nullable Integer handle(final @Nullable String projectId, final Logger logger);
-    }
+    /// The evaluation registry class
+    ///
+    /// @param  <T>   The type of the input
+    /// @param  <R>   The type of the output
+    static class EvaluationRegistry<T, R> {
+        // Maps a Condition (Predicate) -> Action that returns a value (Function)
+        private final Map<Predicate<T>, Function<T, @Nullable R>> rules = new LinkedHashMap<>();
 
-    /// The null project ID handler
-    static class NullProjectIdHandler implements ProjectIdHandler {
-        /// Handle a null project ID
+        /// Register a rule: "If condition applies to input T, execute function and return R"
         ///
-        /// @param  projectId java.lang.String
-        /// @param  logger    org.slf4j.Logger
-        /// @return           java.lang.Integer
-        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
-            logger.error("Required request parameter 'projectId' is missing");
-
-            return null;
+        /// @param  condition   java.util.function.Predicate<T>
+        /// @param  action      java.util.function.Function<T, R>
+        public void registerRule(Predicate<T> condition, Function<T, @Nullable R> action) {
+            rules.put(condition, action);
         }
-    }
 
-    /// The blank project ID handler
-    static class BlankProjectIdHandler implements ProjectIdHandler {
-        /// Handle a blank project ID
+        /// Evaluate input against rules and return the resulting value
         ///
-        /// @param  projectId java.lang.String
-        /// @param  logger    org.slf4j.Logger
-        /// @return           java.lang.Integer
-        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
-            logger.error("Required request parameter 'projectId' is blank");
-
-            return null;
-        }
-    }
-
-    /// The string project ID handler
-    static class StringProjectIdHandler implements ProjectIdHandler {
-        /// Handle a string project ID
-        ///
-        /// @param  projectId java.lang.String
-        /// @param  logger    org.slf4j.Logger
-        /// @return           java.lang.Integer
-        public @Nullable Integer handle(final @Nullable String projectId, final Logger logger) {
-            Integer value = null;
-
-            if (projectId == null) {
-                logger.error("'projectId' request parameter is null");
-                return null;
+        /// @param  input   T
+        /// @return         R
+        public @Nullable R evaluate(final T input) {
+            for (final Map.Entry<Predicate<T>, Function<T, @Nullable R>> entry : rules.entrySet()) {
+                if (entry.getKey().test(input)) {
+                    return entry.getValue().apply(input); // Return the calculated result
+                }
             }
 
-            try {
-                value = Integer.valueOf(projectId);
-            } catch (final NumberFormatException e) {
-                logger.error("Invalid 'projectId' request parameter: {}", projectId, e);
-            }
-
-            return value;
-        }
-    }
-
-    /// The project ID registry
-    static class ProjectIdRegistry {
-        /// The handlers
-        private final Map<String, ProjectIdHandler> handlers = new HashMap<>();
-
-        /// Register a type with a hdnler
-        ///
-        /// @param  type    java.lang.String
-        /// @param  handler net.jmp.demo.glassfish.war.web.UsersServlet.ProjectIdHandler
-        public void register(final String type, final ProjectIdHandler handler) {
-            handlers.put(type.toUpperCase(), handler);
-        }
-
-        /// Get a handler by type
-        ///
-        /// @param  type    java.lang.String
-        /// @return         net.jmp.demo.glassfish.war.web.UsersServlet.ProjectIdHandler
-        public ProjectIdHandler getHandler(final String type) {
-            ProjectIdHandler handler = handlers.get(type.toUpperCase());
-
-            if (handler == null) {
-                throw new IllegalArgumentException("Unsupported type: " + type);
-            }
-
-            return handler;
+            throw new IllegalArgumentException("No matching rule for input: " + input);
         }
     }
 }
