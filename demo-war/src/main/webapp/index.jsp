@@ -51,6 +51,7 @@
         <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>
         <p><a href="<c:url value='/servlet/projects' />"><fmt:message key="jsp.index.projects" /></a></p>
         <p><a href="<c:url value='/servlet/register' />"><fmt:message key="jsp.index.register" /></a></p>
+        <p><a href="<c:url value='/jsf/signup.xhtml' />"><fmt:message key="jsp.index.signup" /></a></p>
         <p><a href="<c:url value='/servlet/welcome-jsf' />"><fmt:message key="jsp.index.welcome.jsf" /></a></p>
         <p>Version: <c:out value="${initParam.appVersion}" /></p>
     </body>
