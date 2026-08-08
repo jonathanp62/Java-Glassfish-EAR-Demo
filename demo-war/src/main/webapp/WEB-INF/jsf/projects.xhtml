@@ -34,30 +34,30 @@
       xmlns:h="jakarta.faces.html">
     <f:view>
         <h:head>
-            <title><h:outputText value="#{msg['jsp.projects.title']}" /></title>
+            <title><h:outputText value="#{msg['jsf.projects.title']}" /></title>
             <h:outputStylesheet name="css/styles.css" />
         </h:head>
         <h:body>
-            <h2><h:outputText value="#{msg['jsp.projects.title']}" /></h2>
+            <h2><h:outputText value="#{msg['jsf.projects.title']}" /></h2>
 
             <h:dataTable value="#{requestScope.projects}" var="p">
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.projects.projectId']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.projects.projectId']}" /></f:facet>
                     <h:outputText value="#{p.projectId}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.projects.projectName']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.projects.projectName']}" /></f:facet>
                     <h:outputLink value="#{request.contextPath}/users" style="display:block; text-align:center;">
                         <f:param name="projectId" value="#{p.projectId}" />
                         <h:outputText value="#{p.projectName}" />
                     </h:outputLink>
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.projects.status']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.projects.status']}" /></f:facet>
                     <h:outputText value="#{p.status}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.projects.createdAt']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.projects.createdAt']}" /></f:facet>
                     <h:outputText value="#{p.createdAt}" style="display:block; text-align:center;">
                         <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
                     </h:outputText>

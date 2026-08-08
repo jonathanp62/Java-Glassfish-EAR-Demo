@@ -34,37 +34,37 @@
       xmlns:h="jakarta.faces.html">
 <f:view>
     <h:head>
-        <title><h:outputText value="#{msg['jsp.distance.title']}" /></title>
+        <title><h:outputText value="#{msg['jsf.distance.title']}" /></title>
         <h:outputStylesheet name="css/styles.css" />
     </h:head>
     <h:body>
-        <h2><h:outputText value="#{msg['jsp.distance.title']}" /></h2>
+        <h2><h:outputText value="#{msg['jsf.distance.title']}" /></h2>
 
         <h:dataTable value="#{requestScope.distances}" var="d">
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.fromZipCode']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.fromZipCode']}" /></f:facet>
                 <h:outputText value="#{d.fromZipCode}" style="display:block; text-align:center;" />
             </h:column>
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.toZipCode']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.toZipCode']}" /></f:facet>
                 <h:outputText value="#{d.toZipCode}" style="display:block; text-align:center;" />
             </h:column>
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.toCity']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.toCity']}" /></f:facet>
                 <h:outputText value="#{d.toCity}" style="display:block; text-align:center;" />
             </h:column>
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.toState']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.toState']}" /></f:facet>
                 <h:outputText value="#{d.toState}" style="display:block; text-align:center;" />
             </h:column>
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.distanceInMiles']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.distanceInMiles']}" /></f:facet>
                 <h:outputText value="#{d.distanceInMiles}" style="display:block; text-align:right;">
                     <f:convertNumber type="number" minFractionDigits="3" maxFractionDigits="3" />
                 </h:outputText>
             </h:column>
             <h:column>
-                <f:facet name="header"><h:outputText value="#{msg['jsp.distance.distanceInKilometers']}" /></f:facet>
+                <f:facet name="header"><h:outputText value="#{msg['jsf.distance.distanceInKilometers']}" /></f:facet>
                 <h:outputText value="#{d.distanceInKilometers}" style="display:block; text-align:right;">
                     <f:convertNumber type="number" minFractionDigits="3" maxFractionDigits="3" />
                 </h:outputText>

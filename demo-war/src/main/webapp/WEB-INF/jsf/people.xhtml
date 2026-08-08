@@ -34,27 +34,27 @@
       xmlns:h="jakarta.faces.html">
     <f:view>
         <h:head>
-            <title><h:outputText value="#{msg['jsp.people.title']}" /></title>
+            <title><h:outputText value="#{msg['jsf.people.title']}" /></title>
             <h:outputStylesheet name="css/styles.css" />
         </h:head>
         <h:body>
-            <h2><h:outputText value="#{msg['jsp.people.title']}" /></h2>
+            <h2><h:outputText value="#{msg['jsf.people.title']}" /></h2>
 
             <h:dataTable value="#{requestScope.people}" var="person">
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.id']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.people.id']}" /></f:facet>
                     <h:outputText value="#{person.id}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.name']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.people.name']}" /></f:facet>
                     <h:outputText value="#{person.name}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.email']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.people.email']}" /></f:facet>
                     <h:outputText value="#{person.email}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.people.comment']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.people.comment']}" /></f:facet>
                     <h:outputText value="#{person.comment}" style="display:block; text-align:center;" />
                 </h:column>
             </h:dataTable>

@@ -34,42 +34,42 @@
       xmlns:h="jakarta.faces.html">
     <f:view>
         <h:head>
-            <title><h:outputText value="#{msg['jsp.users.title']}" /></title>
+            <title><h:outputText value="#{msg['jsf.users.title']}" /></title>
             <h:outputStylesheet name="css/styles.css" />
         </h:head>
         <h:body>
             <h2>
-                <h:outputText value="#{msg['jsp.users.title']}" />
+                <h:outputText value="#{msg['jsf.users.title']}" />
                 <h:outputText value=" #{requestScope.projectId}" />
             </h2>
 
             <h:dataTable value="#{requestScope.users}" var="u">
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.userId']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.userId']}" /></f:facet>
                     <h:outputText value="#{u.userId}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.firstName']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.firstName']}" /></f:facet>
                     <h:outputText value="#{u.firstName}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.lastName']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.lastName']}" /></f:facet>
                     <h:outputText value="#{u.lastName}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.email']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.email']}" /></f:facet>
                     <h:outputText value="#{u.email}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.age']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.age']}" /></f:facet>
                     <h:outputText value="#{u.age}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.role']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.role']}" /></f:facet>
                     <h:outputText value="#{u.role}" style="display:block; text-align:center;" />
                 </h:column>
                 <h:column>
-                    <f:facet name="header"><h:outputText value="#{msg['jsp.users.createdAt']}" /></f:facet>
+                    <f:facet name="header"><h:outputText value="#{msg['jsf.users.createdAt']}" /></f:facet>
                     <h:outputText value="#{u.createdAt}" style="display:block; text-align:center;">
                         <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss" />
                     </h:outputText>
