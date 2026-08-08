@@ -46,6 +46,7 @@
         <h2><fmt:message key="jsp.index.title" /></h2>
         <p><a href="<c:url value='/servlet/cars' />"><fmt:message key="jsp.index.cars" /></a></p>
         <p><a href="<c:url value='/servlet/distance' />"><fmt:message key="jsp.index.distance" /></a></p>
+        <p><a href="<c:url value='/jsf/enroll.xhtml' />"><fmt:message key="jsp.index.enroll" /></a></p>
         <p><a href="<c:url value='/servlet/form' />"><fmt:message key="jsp.index.form.demo" /></a></p>
         <p><a href="<c:url value='/servlet/hello' />"><fmt:message key="jsp.index.hello" /></a></p>
         <p><a href="<c:url value='/servlet/people' />"><fmt:message key="jsp.index.people" /></a></p>
