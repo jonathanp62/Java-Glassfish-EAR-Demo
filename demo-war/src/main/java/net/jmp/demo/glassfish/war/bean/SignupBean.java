@@ -57,11 +57,10 @@ import net.jmp.demo.glassfish.ejb.service.RegistrationService;
 
 import org.jspecify.annotations.Nullable;
 
-import static net.jmp.util.logging.LoggerUtils.entryWith;
-import static net.jmp.util.logging.LoggerUtils.exit;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static net.jmp.util.logging.LoggerUtils.*;
 
 /// The signup backing bean class
 @Named("signupBean")
@@ -130,7 +129,7 @@ public class SignupBean implements Serializable {
     /// @return java.lang.String    Return null to stay on the same view
     public @Nullable String submit() {
         if (this.logger.isTraceEnabled()) {
-            this.logger.trace(entryWith(this.email));
+            this.logger.trace(entry());
         }
 
         final String nonNullEmail = this.email != null ? this.email : "";

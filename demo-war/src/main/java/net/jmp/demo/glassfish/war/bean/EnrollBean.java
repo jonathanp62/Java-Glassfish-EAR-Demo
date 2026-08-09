@@ -34,12 +34,14 @@ import jakarta.annotation.PostConstruct;
 
 import jakarta.faces.annotation.ManagedProperty;
 
+import jakarta.faces.context.FacesContext;
+import jakarta.faces.context.Flash;
+
 import jakarta.faces.view.ViewScoped;
 
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
-import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -47,11 +49,13 @@ import jakarta.validation.constraints.Pattern;
 import java.io.Serial;
 import java.io.Serializable;
 
+import java.text.MessageFormat;
+
 import java.util.ResourceBundle;
 
 import org.jspecify.annotations.Nullable;
 
-import static net.jmp.util.logging.LoggerUtils.entryWith;
+import static net.jmp.util.logging.LoggerUtils.entry;
 import static net.jmp.util.logging.LoggerUtils.exit;
 
 import org.slf4j.Logger;
@@ -95,7 +99,10 @@ public class EnrollBean implements Serializable {
 
     /// The zip code
     @NotBlank(message = "Zip code is required")
-    @Digits(integer = 5, fraction = 0, message = "Zip code must be 5 digits")
+    @Pattern(
+            regexp = "^\\d{5}([ \\-]\\d{4})?$",
+            message = "Invalid US zip code format"
+    )
     private @Nullable String zipCode;
 
     /// The phone number
@@ -277,7 +284,7 @@ public class EnrollBean implements Serializable {
     /// @return java.lang.String    Return null to stay on the same view
     public @Nullable String submit() {
         if (this.logger.isTraceEnabled()) {
-            this.logger.trace(entryWith(this.email));
+            this.logger.trace(entry());
         }
 
         final String nonNullFirstName = this.firstName != null ? this.firstName : "";
@@ -289,21 +296,37 @@ public class EnrollBean implements Serializable {
         final String nonNullPhoneNumber = this.phoneNumber != null ? this.phoneNumber : "";
         final String nonNullEmail = this.email != null ? this.email : "";
 
-        if (this.logger.isInfoEnabled()) {
-            this.logger.info("First name: {}", nonNullFirstName);   // @todo Create language entries
-            this.logger.info("Last name: {}", nonNullLastName);
-            this.logger.info("Address: {}", nonNullAddress);
-            this.logger.info("City: {}", nonNullCity);
-            this.logger.info("State: {}", nonNullState);
-            this.logger.info("Zip code: {}", nonNullZipCode);
-            this.logger.info("Phone number: {}", nonNullPhoneNumber);
-            this.logger.info("Email: {}", nonNullEmail);
+        final var facesContext = FacesContext.getCurrentInstance();
+
+        if (facesContext != null) {
+            final Flash flash = facesContext.getExternalContext().getFlash();
+
+            flash.put("firstName", nonNullFirstName);
+            flash.put("lastName", nonNullLastName);
+            flash.put("address", nonNullAddress);
+            flash.put("city", nonNullCity);
+            flash.put("state", nonNullState);
+            flash.put("zipCode", nonNullZipCode);
+            flash.put("phoneNumber", nonNullPhoneNumber);
+            flash.put("email", nonNullEmail);
         }
+
+        if (this.logger.isInfoEnabled()) {
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.firstName"), nonNullFirstName));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.lastName"), nonNullLastName));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.address"), nonNullAddress));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.city"), nonNullCity));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.state"), nonNullState));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.zipCode"), nonNullZipCode));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.phoneNumber"), nonNullPhoneNumber));
+            this.logger.info(MessageFormat.format(this.bundle.getString("bean.enroll.email"), nonNullEmail));
+        }
+
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
         }
 
-        return null;
+        return "enrolled.xhtml?faces-redirect=true";
     }
 }
