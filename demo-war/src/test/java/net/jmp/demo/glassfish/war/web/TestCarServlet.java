@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)TestCarServlet.java  0.4.0   07/18/2026
  * (#)TestCarServlet.java  0.2.0   07/09/2026
  *
  * @author   Jonathan Parker
@@ -68,7 +69,7 @@ class TestCarServlet {
         final List<Car> cars = List.of(car);
 
         when(carService.getAll()).thenReturn(cars);
-        when(request.getRequestDispatcher("/WEB-INF/jsp/cars.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/cars.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

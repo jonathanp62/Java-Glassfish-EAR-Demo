@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)TestProjectsServlet.java 0.4.0   07/25/2026
  * (#)TestProjectsServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -68,7 +69,7 @@ class TestProjectsServlet {
         final List<Project> projects = List.of(project);
 
         when(projectService.getAll()).thenReturn(projects);
-        when(request.getRequestDispatcher("/WEB-INF/jsp/projects.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/projects.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 

@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)TestHelloServlet.java 0.4.0   07/21/2026
  * (#)TestHelloServlet.java 0.1.0   07/07/2026
  *
  * @author   Jonathan Parker
@@ -62,7 +63,7 @@ class TestHelloServlet {
         final HelloService helloService = mock(HelloService.class);
 
         when(helloService.hello("Jonathan")).thenReturn("Hello, Jonathan, from the hello service");
-        when(request.getRequestDispatcher("/WEB-INF/jsp/hello.jsp")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/hello.xhtml")).thenReturn(dispatcher);
 
         setHelloService(servlet, helloService);
 

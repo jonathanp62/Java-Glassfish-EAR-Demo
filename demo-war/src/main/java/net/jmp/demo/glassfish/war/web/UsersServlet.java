@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)UsersServlet.java 0.4.0   07/25/2026
  * (#)UsersServlet.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -45,6 +46,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serial;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.function.Predicate;
+
 import net.jmp.demo.glassfish.ejb.service.UserService;
 
 import org.jspecify.annotations.Nullable;
@@ -63,8 +69,8 @@ public class UsersServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The users JSP
-    private static final String USERS_JSP = "/WEB-INF/jsp/users.jsp";
+    /// The users JSF
+    private static final String USERS_JSF = "/WEB-INF/jsf/users.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -98,14 +104,14 @@ public class UsersServlet extends HttpServlet {
             this.logger.trace(entryWith(request, response));
         }
 
-        final Integer projectId = this.readProjectId(request);
+        final @Nullable Integer projectId = this.readProjectId(request);
 
         if (projectId != null) {
             request.setAttribute("projectId", projectId);
             request.setAttribute("users", this.userService.getForProject(projectId));
-            request.getRequestDispatcher(USERS_JSP).forward(request, response);
+            request.getRequestDispatcher(USERS_JSF).forward(request, response);
         } else {
-            throw new ServletException("Project ID is null or invalid");
+            throw new ServletException("Project ID is null, blank or invalid");
         }
 
         if (this.logger.isTraceEnabled()) {
@@ -122,24 +128,82 @@ public class UsersServlet extends HttpServlet {
             this.logger.trace(entryWith(request));
         }
 
-        Integer projectId = null;
+        // Registry taking a String input and returning an Integer
 
-        final String projectIdParam = request.getParameter("projectId");
+        final EvaluationRegistry<String, Integer> registry = new EvaluationRegistry<>();
 
-        if (projectIdParam == null || projectIdParam.isBlank()) {
-            this.logger.error("Required request parameter 'projectId' is missing or blank");
-        } else {
-            try {
-                projectId = Integer.valueOf(projectIdParam);
-            } catch (final NumberFormatException e) {
-                this.logger.error("Invalid 'projectId' request parameter: {}", projectIdParam, e);
-            }
-        }
+        // Register the rules
+
+        registry.registerRule(
+                val -> val == null,
+                val -> {
+                    this.logger.error("Required request parameter 'projectId' is missing");
+
+                    return null;
+                }
+        );
+
+        registry.registerRule(
+                String::isBlank,
+                val -> {
+                    logger.error("Required request parameter 'projectId' is blank");
+
+                    return null;
+                }
+        );
+
+        registry.registerRule(
+                val -> !val.isBlank(),
+                val -> {
+                    Integer value = null;
+
+                    try {
+                        value = Integer.valueOf(val);
+                    } catch (final NumberFormatException e) {
+                        logger.error("Invalid 'projectId' request parameter: {}", val, e);
+                    }
+
+                    return value;
+                }
+        );
+
+        final Integer projectId = registry.evaluate(request.getParameter("projectId"));
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(projectId));
         }
 
         return projectId;
+    }
+
+    /// The evaluation registry class
+    ///
+    /// @param  <T>   The type of the input
+    /// @param  <R>   The type of the output
+    static class EvaluationRegistry<T, R> {
+        // Maps a Condition (Predicate) -> Action that returns a value (Function)
+        private final Map<Predicate<T>, Function<T, @Nullable R>> rules = new LinkedHashMap<>();
+
+        /// Register a rule: "If condition applies to input T, execute function and return R"
+        ///
+        /// @param  condition   java.util.function.Predicate<T>
+        /// @param  action      java.util.function.Function<T, R>
+        public void registerRule(Predicate<T> condition, Function<T, @Nullable R> action) {
+            rules.put(condition, action);
+        }
+
+        /// Evaluate input against rules and return the resulting value
+        ///
+        /// @param  input   T
+        /// @return         R
+        public @Nullable R evaluate(final T input) {
+            for (final Map.Entry<Predicate<T>, Function<T, @Nullable R>> entry : rules.entrySet()) {
+                if (entry.getKey().test(input)) {
+                    return entry.getValue().apply(input); // Return the calculated result
+                }
+            }
+
+            throw new IllegalArgumentException("No matching rule for input: " + input);
+        }
     }
 }

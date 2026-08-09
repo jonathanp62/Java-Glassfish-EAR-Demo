@@ -1,8 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)CarServlet.java   0.4.0   07/18/2026
- * (#)CarServlet.java   0.2.0   07/09/2026
+ * (#)WelcomeJsfServlet.java    0.4.0   07/18/2026
  *
  * @author   Jonathan Parker
  *
@@ -31,8 +30,6 @@ package net.jmp.demo.glassfish.war.web;
 
 import jakarta.annotation.security.DeclareRoles;
 
-import jakarta.ejb.EJB;
-
 import jakarta.servlet.ServletException;
 
 import jakarta.servlet.annotation.HttpConstraint;
@@ -44,9 +41,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.io.Serial;
-
-import net.jmp.demo.glassfish.ejb.service.CarService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,41 +48,17 @@ import org.slf4j.LoggerFactory;
 import static net.jmp.util.logging.LoggerUtils.entryWith;
 import static net.jmp.util.logging.LoggerUtils.exit;
 
-/// The car servlet class
-@WebServlet(urlPatterns = "/servlet/cars")
+/// The welcome to JSF servlet class
+@WebServlet(urlPatterns = "/servlet/welcome-jsf")
 @DeclareRoles("user")
 @ServletSecurity(@HttpConstraint(rolesAllowed = "user"))
-public class CarServlet extends HttpServlet {
-    /// The serial version UID
-    @Serial
-    private static final long serialVersionUID = 1L;
-
-    /// The cars JSF
-    private static final String CARS_JSF = "/WEB-INF/jsf/cars.xhtml";
+public class WelcomeJsfServlet extends HttpServlet {
+    /// The welcome to JSF page
+    private static final String WELCOME_JSF = "/WEB-INF/jsf/welcome-jsf.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    /// The car service
-    @EJB
-    @SuppressWarnings("NullAway")
-    private transient CarService carService;
-
-    /// Default constructor
-    /// It is required by Glassfish since
-    /// there is a parameterized constructor.
-    public CarServlet() {
-        super();
-    }
-
-    /// Constructor for testing
-    ///
-    /// @param  carService  net.jmp.demo.glassfish.war.service.CarService
-    CarServlet(final CarService carService) {
-        this.carService = carService;
-    }
-
-    /// The GET method. Called from /servlet/cars.
+    /// The GET method
     ///
     /// @param  request     jakarta.servlet.http.HttpServletRequest
     /// @param  response    jakarta.servlet.http.HttpServletResponse
@@ -100,8 +70,7 @@ public class CarServlet extends HttpServlet {
             this.logger.trace(entryWith(request, response));
         }
 
-        request.setAttribute("cars", this.carService.getAll());
-        request.getRequestDispatcher(CARS_JSF).forward(request, response);
+        request.getRequestDispatcher(WELCOME_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());
