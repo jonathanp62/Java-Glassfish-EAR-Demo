@@ -1,8 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)TestPeopleServlet.java 0.4.0   07/21/2026
- * (#)TestPeopleServlet.java 0.2.0   07/10/2026
+ * (#)TestWelcomeJsfServlet.java    0.4.0   07/18/2026
  *
  * @author   Jonathan Parker
  *
@@ -34,44 +33,25 @@ import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.util.List;
-
-import net.jmp.demo.glassfish.ejb.dto.Person;
-
-import net.jmp.demo.glassfish.ejb.service.PeopleService;
-
 import org.junit.jupiter.api.Test;
 
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class TestPeopleServlet {
+class TestWelcomeJsfServlet {
     @Test
     void testDoGet() throws Exception {
-        final PeopleService peopleService = mock(PeopleService.class);
-        final PeopleServlet servlet = new PeopleServlet(peopleService);
+        final WelcomeJsfServlet servlet = new WelcomeJsfServlet();
 
         final HttpServletRequest request = mock(HttpServletRequest.class);
         final HttpServletResponse response = mock(HttpServletResponse.class);
         final RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
-        final Person person = new Person();
-
-        person.setId(1L);
-        person.setName("John");
-        person.setEmail("john@example.com");
-        person.setComment("A comment");
-
-        final List<Person> people = List.of(person);
-
-        when(peopleService.getAll()).thenReturn(people);
-        when(request.getRequestDispatcher("/WEB-INF/jsf/people.xhtml")).thenReturn(dispatcher);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/welcome-jsf.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 
-        verify(request).setAttribute(eq("people"), eq(people));
         verify(dispatcher).forward(request, response);
     }
 }

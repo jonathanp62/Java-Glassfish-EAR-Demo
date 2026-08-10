@@ -65,8 +65,8 @@ public class DistanceServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The distance JSP
-    private static final String DISTANCE_JSP = "/WEB-INF/jsp/distance.jsp";
+    /// The distance JSF
+    private static final String DISTANCE_JSF = "/WEB-INF/jsf/distance.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -106,7 +106,7 @@ public class DistanceServlet extends HttpServlet {
 
         request.setAttribute("distances", distances);
 
-        request.getRequestDispatcher(DISTANCE_JSP).forward(request, response);
+        request.getRequestDispatcher(DISTANCE_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());

@@ -1,8 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
- * (#)TestPeopleServlet.java 0.4.0   07/21/2026
- * (#)TestPeopleServlet.java 0.2.0   07/10/2026
+ * (#)TestDistanceServlet.java  0.4.0   07/21/2026
  *
  * @author   Jonathan Parker
  *
@@ -36,9 +35,9 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.List;
 
-import net.jmp.demo.glassfish.ejb.dto.Person;
+import net.jmp.demo.glassfish.ejb.dto.DistanceData;
 
-import net.jmp.demo.glassfish.ejb.service.PeopleService;
+import net.jmp.demo.glassfish.ejb.service.DistanceService;
 
 import org.junit.jupiter.api.Test;
 
@@ -47,31 +46,33 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-class TestPeopleServlet {
+class TestDistanceServlet {
     @Test
     void testDoGet() throws Exception {
-        final PeopleService peopleService = mock(PeopleService.class);
-        final PeopleServlet servlet = new PeopleServlet(peopleService);
+        final DistanceService distanceService = mock(DistanceService.class);
+        final DistanceServlet servlet = new DistanceServlet(distanceService);
 
         final HttpServletRequest request = mock(HttpServletRequest.class);
         final HttpServletResponse response = mock(HttpServletResponse.class);
         final RequestDispatcher dispatcher = mock(RequestDispatcher.class);
 
-        final Person person = new Person();
+        final DistanceData distanceData = new DistanceData();
 
-        person.setId(1L);
-        person.setName("John");
-        person.setEmail("john@example.com");
-        person.setComment("A comment");
+        distanceData.setFromZipCode("01234");
+        distanceData.setToZipCode("56789");
+        distanceData.setToCity("Boston");
+        distanceData.setToState("MA");
+        distanceData.setDistanceInMiles(1234.567);
+        distanceData.setDistanceInKilometers(1987.123);
 
-        final List<Person> people = List.of(person);
+        final List<DistanceData> distances = List.of(distanceData);
 
-        when(peopleService.getAll()).thenReturn(people);
-        when(request.getRequestDispatcher("/WEB-INF/jsf/people.xhtml")).thenReturn(dispatcher);
+        when(distanceService.getAll()).thenReturn(distances);
+        when(request.getRequestDispatcher("/WEB-INF/jsf/distance.xhtml")).thenReturn(dispatcher);
 
         servlet.doGet(request, response);
 
-        verify(request).setAttribute(eq("people"), eq(people));
+        verify(request).setAttribute(eq("distances"), eq(distances));
         verify(dispatcher).forward(request, response);
     }
 }

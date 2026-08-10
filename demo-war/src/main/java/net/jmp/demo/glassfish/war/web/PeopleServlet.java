@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.war.web;
 
 /*
+ * (#)PeopleServlet.java    0.4.0   07/21/2026
  * (#)PeopleServlet.java    0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -62,8 +63,8 @@ public class PeopleServlet extends HttpServlet {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    /// The people JSP
-    private static final String PEOPLE_JSP = "/WEB-INF/jsp/people.jsp";
+    /// The people JSF
+    private static final String PEOPLE_JSF = "/WEB-INF/jsf/people.xhtml";
 
     // Initialize the SLF4J Logger
     private final transient Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -100,7 +101,7 @@ public class PeopleServlet extends HttpServlet {
         }
 
         request.setAttribute("people", this.peopleService.getAll());
-        request.getRequestDispatcher(PEOPLE_JSP).forward(request, response);
+        request.getRequestDispatcher(PEOPLE_JSF).forward(request, response);
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exit());

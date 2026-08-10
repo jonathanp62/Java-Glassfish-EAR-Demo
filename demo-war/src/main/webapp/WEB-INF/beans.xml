@@ -1,9 +1,11 @@
-<%--
- (#)hello.jsp   0.1.0   07/04/2026
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ (#)beans.xml   0.4.0   08/07/2026
 
  @author   Jonathan Parker
- @version  0.1.0
- @since    0.1.0
+ @version  0.4.0
+ @since    0.4.0
 
  MIT License
 
@@ -26,20 +28,10 @@
  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  SOFTWARE.
---%>
+-->
 
-<%@ taglib prefix="c" uri="jakarta.tags.core" %>
-<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
-<!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title><fmt:message key="jsp.hello.hello" /></title>
-    <link rel="stylesheet" href="<c:url value='/static/css/styles.css' />" />
-  </head>
-  <body>
-    <h2><fmt:message key="jsp.hello.hello" /></h2>
-    <p>${requestScope.greeting}</p>
-  </body>
-</html>
+<beans xmlns="https://jakarta.ee/xml/ns/jakartaee"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/beans_4_0.xsd"
+       bean-discovery-mode="annotated">
+</beans>
