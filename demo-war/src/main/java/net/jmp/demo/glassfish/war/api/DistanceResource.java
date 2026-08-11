@@ -1,7 +1,7 @@
 package net.jmp.demo.glassfish.war.api;
 
 /*
- * (#)CarsResource.java 0.5.0   08/11/2026
+ * (#)DistanceResource.java 0.5.0   08/11/2026
  *
  * @author   Jonathan Parker
  *
@@ -28,8 +28,6 @@ package net.jmp.demo.glassfish.war.api;
  * SOFTWARE.
  */
 
-import jakarta.ejb.EJB;
-
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
 
@@ -43,9 +41,9 @@ import jakarta.ws.rs.core.Response;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import net.jmp.demo.glassfish.ejb.dto.Car;
+import net.jmp.demo.glassfish.ejb.dto.DistanceData;
 
-import net.jmp.demo.glassfish.ejb.service.CarService;
+import net.jmp.demo.glassfish.ejb.service.DistanceService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,25 +51,25 @@ import org.slf4j.LoggerFactory;
 import static net.jmp.util.logging.LoggerUtils.entry;
 import static net.jmp.util.logging.LoggerUtils.exitWith;
 
-/// The cars resource class
-@Path("/cars")
-public class CarsResource {
+/// The distance resource class
+@Path("/distance")
+public class DistanceResource {
     // Initialize the SLF4J Logger
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /// The messages resource bundle
     private final ResourceBundle bundle;
 
-    /// The car service
-    @EJB
+    /// The distance service
+    @Inject
     @SuppressWarnings("NullAway")
-    private CarService carService;
+    private DistanceService distanceService;
 
     /// The constructor
     ///
     /// @param  bundle  java.util.ResourceBundle
     @Inject
-    public CarsResource(@Named("messages") final ResourceBundle bundle) {
+    public DistanceResource(@Named("messages") final ResourceBundle bundle) {
         super();
 
         this.bundle = bundle;
@@ -82,13 +80,13 @@ public class CarsResource {
     /// @return jakarta.ws.rs.core.Response
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response cars() {
+    public Response distance() {
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(entry());
         }
 
-        final List<Car> cars = this.carService.getAll();
-        final Response response = Response.ok(cars).build();
+        final List<DistanceData> distanceData = this.distanceService.getAll();
+        final Response response = Response.ok(distanceData).build();
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(response));
@@ -97,3 +95,4 @@ public class CarsResource {
         return response;
     }
 }
+
