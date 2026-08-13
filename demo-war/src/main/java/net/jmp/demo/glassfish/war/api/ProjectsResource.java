@@ -1,7 +1,7 @@
 package net.jmp.demo.glassfish.war.api;
 
 /*
- * (#)PeopleResource.java   0.5.0   08/12/2026
+ * (#)ProjectsResource.java 0.5.0   08/13/2026
  *
  * @author   Jonathan Parker
  *
@@ -39,9 +39,9 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 
-import net.jmp.demo.glassfish.ejb.dto.Person;
+import net.jmp.demo.glassfish.ejb.dto.Project;
 
-import net.jmp.demo.glassfish.ejb.service.PeopleService;
+import net.jmp.demo.glassfish.ejb.service.ProjectService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,19 +49,19 @@ import org.slf4j.LoggerFactory;
 import static net.jmp.util.logging.LoggerUtils.entry;
 import static net.jmp.util.logging.LoggerUtils.exitWith;
 
-/// The people resource class
-@Path("/people")
-public class PeopleResource {
+/// The projects resource class
+@Path("/projects")
+public class ProjectsResource {
     // Initialize the SLF4J Logger
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /// The people service
+    /// The project service
     @EJB
     @SuppressWarnings("NullAway")
-    private PeopleService peopleService;
+    private ProjectService projectService;
 
     /// The constructor
-    public PeopleResource() {
+    public ProjectsResource() {
         super();
     }
 
@@ -70,13 +70,13 @@ public class PeopleResource {
     /// @return jakarta.ws.rs.core.Response
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response people() {
+    public Response projects() {
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(entry());
         }
 
-        final List<Person> people = this.peopleService.getAll();
-        final Response response = Response.ok(people).build();
+        final List<Project> projects = this.projectService.getAll();
+        final Response response = Response.ok(projects).build();
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(response));

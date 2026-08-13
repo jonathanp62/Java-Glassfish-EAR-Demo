@@ -30,9 +30,6 @@ package net.jmp.demo.glassfish.war.api;
 
 import jakarta.ejb.EJB;
 
-import jakarta.inject.Inject;
-import jakarta.inject.Named;
-
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -41,7 +38,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import net.jmp.demo.glassfish.ejb.dto.Car;
 
@@ -59,22 +55,14 @@ public class CarsResource {
     // Initialize the SLF4J Logger
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /// The messages resource bundle
-    private final ResourceBundle bundle;
-
     /// The car service
     @EJB
     @SuppressWarnings("NullAway")
     private CarService carService;
 
     /// The constructor
-    ///
-    /// @param  bundle  java.util.ResourceBundle
-    @Inject
-    public CarsResource(@Named("messages") final ResourceBundle bundle) {
+    public CarsResource() {
         super();
-
-        this.bundle = bundle;
     }
 
     /// The GET method that returns a JSON response

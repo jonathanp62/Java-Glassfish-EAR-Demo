@@ -29,7 +29,6 @@ package net.jmp.demo.glassfish.war.api;
  */
 
 import jakarta.inject.Inject;
-import jakarta.inject.Named;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -39,7 +38,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
-import java.util.ResourceBundle;
 
 import net.jmp.demo.glassfish.ejb.dto.DistanceData;
 
@@ -57,22 +55,14 @@ public class DistanceResource {
     // Initialize the SLF4J Logger
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    /// The messages resource bundle
-    private final ResourceBundle bundle;
-
     /// The distance service
     @Inject
     @SuppressWarnings("NullAway")
     private DistanceService distanceService;
 
     /// The constructor
-    ///
-    /// @param  bundle  java.util.ResourceBundle
-    @Inject
-    public DistanceResource(@Named("messages") final ResourceBundle bundle) {
+    public DistanceResource() {
         super();
-
-        this.bundle = bundle;
     }
 
     /// The GET method that returns a JSON response
