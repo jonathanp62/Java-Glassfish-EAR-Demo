@@ -32,12 +32,14 @@ import jakarta.ejb.EJB;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 import net.jmp.demo.glassfish.ejb.dto.User;
 
@@ -46,8 +48,7 @@ import net.jmp.demo.glassfish.ejb.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.jmp.util.logging.LoggerUtils.entry;
-import static net.jmp.util.logging.LoggerUtils.exitWith;
+import static net.jmp.util.logging.LoggerUtils.*;
 
 /// The users resource class
 @Path("/users")
@@ -65,7 +66,7 @@ public class UsersResource {
         super();
     }
 
-    /// The GET method that returns a JSON response
+    /// A GET method that returns a JSON response
     ///
     /// @return jakarta.ws.rs.core.Response
     @GET
@@ -77,6 +78,34 @@ public class UsersResource {
 
         final List<User> users = this.userService.getAll();
         final Response response = Response.ok(users).build();
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(response));
+        }
+
+        return response;
+    }
+
+    /// A GET method that returns a JSON response
+    ///
+    /// @return jakarta.ws.rs.core.Response
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response userById(@PathParam("id") final String id) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(id));
+        }
+
+        final Optional<User> user = this.userService.getByUserId(Integer.parseInt(id));
+
+        Response response;
+
+        if (user.isPresent()) {
+            response = Response.ok(user.get()).build();
+        } else {
+            response = Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(response));

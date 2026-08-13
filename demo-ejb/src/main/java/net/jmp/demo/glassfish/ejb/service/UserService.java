@@ -42,6 +42,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -177,5 +178,55 @@ public class UserService {
         }
 
         return users;
+    }
+
+    /// Read a user from the SQLite database
+    ///
+    /// @param  userId  java.lang.Integer
+    /// @return         java.util.Optional<User>
+    public Optional<User> getByUserId(final Integer userId) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(userId));
+        }
+
+        User user = null;
+
+        final String sql = "SELECT user_id, first_name, last_name, email, age, role, project_id, created_at FROM users WHERE user_id = ?";
+
+        if (this.dataSource == null) {
+            this.logger.error("The data source is null");
+        } else {
+            try (final Connection connection = this.dataSource.getConnection();
+                 final PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, userId);
+
+                try (final ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user = new User();
+
+                        user.setUserId(resultSet.getInt("user_id"));
+                        user.setFirstName(resultSet.getString("first_name"));
+                        user.setLastName(resultSet.getString("last_name"));
+                        user.setEmail(resultSet.getString("email"));
+                        user.setAge(resultSet.getInt("age"));
+                        user.setRole(resultSet.getString("role"));
+                        user.setProjectId(resultSet.getInt("project_id"));
+                        user.setCreatedAt(resultSet.getTimestamp("created_at"));
+                    }
+                }
+            } catch (final SQLException e) {
+                this.logger.error("Error reading user from database", e);
+            }
+        }
+
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Read user {}", userId);
+        }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(user));
+        }
+
+        return Optional.ofNullable(user);
     }
 }
