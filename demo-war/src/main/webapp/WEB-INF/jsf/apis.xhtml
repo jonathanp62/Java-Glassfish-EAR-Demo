@@ -39,6 +39,12 @@
     </h:head>
     <h:body>
         <h2><h:outputText value="#{msg['jsf.apis.title']}" /></h2>
+        <p><h:outputLink value="#{request.contextPath}/api/cars"><h:outputText value="#{msg['jsf.apis.cars']}" /></h:outputLink></p>
+        <p><h:outputLink value="#{request.contextPath}/api/distance"><h:outputText value="#{msg['jsf.apis.distance']}" /></h:outputLink></p>
+        <p><h:outputLink value="#{request.contextPath}/api/hello"><h:outputText value="#{msg['jsf.apis.hello']}" /></h:outputLink></p>
+        <p><h:outputLink value="#{request.contextPath}/api/people"><h:outputText value="#{msg['jsf.apis.people']}" /></h:outputLink></p>
+        <p><h:outputLink value="#{request.contextPath}/api/projects"><h:outputText value="#{msg['jsf.apis.projects']}" /></h:outputLink></p>
+        <p><h:outputLink value="#{request.contextPath}/api/users"><h:outputText value="#{msg['jsf.apis.users']}" /></h:outputLink></p>
     </h:body>
 </f:view>
 </html>
