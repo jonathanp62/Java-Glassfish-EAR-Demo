@@ -32,12 +32,14 @@ import jakarta.ejb.EJB;
 
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 import net.jmp.demo.glassfish.ejb.dto.Project;
 
@@ -46,8 +48,7 @@ import net.jmp.demo.glassfish.ejb.service.ProjectService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.jmp.util.logging.LoggerUtils.entry;
-import static net.jmp.util.logging.LoggerUtils.exitWith;
+import static net.jmp.util.logging.LoggerUtils.*;
 
 /// The projects resource class
 @Path("/projects")
@@ -77,6 +78,35 @@ public class ProjectsResource {
 
         final List<Project> projects = this.projectService.getAll();
         final Response response = Response.ok(projects).build();
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(response));
+        }
+
+        return response;
+    }
+
+    /// A GET method that returns a JSON response
+    ///
+    /// @param  id  java.lang.String
+    /// @return     jakarta.ws.rs.core.Response
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response projectById(@PathParam("id") final String id) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(id));
+        }
+
+        final Optional<Project> project = this.projectService.getByProjectId(Integer.parseInt(id));
+
+        Response response;
+
+        if (project.isPresent()) {
+            response = Response.ok(project.get()).build();
+        } else {
+            response = Response.status(Response.Status.NOT_FOUND).build();
+        }
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(response));

@@ -132,7 +132,7 @@ public class UserService {
     /// Read all users for a project from the SQLite database
     ///
     /// @param  projectId   java.lang.Integer
-    /// @return             java.util.List
+    /// @return             java.util.List<net.jmp.demo.glassfish.ejb.dto.User>
     public List<User> getForProject(final Integer projectId) {
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(entryWith(projectId));

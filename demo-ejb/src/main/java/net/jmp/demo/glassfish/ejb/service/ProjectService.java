@@ -41,6 +41,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -51,8 +52,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.jmp.util.logging.LoggerUtils.entry;
-import static net.jmp.util.logging.LoggerUtils.exitWith;
+import static net.jmp.util.logging.LoggerUtils.*;
 
 /// The project service
 @Stateless
@@ -122,5 +122,51 @@ public class ProjectService {
         }
 
         return projects;
+    }
+
+    /// Get a project from the SQLite database
+    ///
+    /// @param  projectId   java.lang.Integer
+    /// @return             java.util.Optional<net.jmp.demo.glassfish.ejb.dto.Project>
+    public Optional<Project> getByProjectId(final Integer projectId) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(projectId));
+        }
+
+        Project project = null;
+
+        final String sql = "SELECT project_id, project_name, status, created_at FROM projects WHERE project_id = ?";
+
+        if (this.dataSource == null) {
+            this.logger.error("DataSource is null");
+        } else {
+            try (final Connection connection = this.dataSource.getConnection();
+                 final PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, projectId);
+
+                try (final ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        project = new Project();
+
+                        project.setProjectId(resultSet.getInt("project_id"));
+                        project.setProjectName(resultSet.getString("project_name"));
+                        project.setStatus(resultSet.getString("status"));
+                        project.setCreatedAt(resultSet.getTimestamp("created_at"));
+                    }
+                }
+            } catch (final SQLException e) {
+                this.logger.error("Error reading project from database", e);
+            }
+        }
+
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Read project {}", projectId);
+        }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(project));
+        }
+
+        return Optional.ofNullable(project);
     }
 }

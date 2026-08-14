@@ -88,7 +88,8 @@ public class UsersResource {
 
     /// A GET method that returns a JSON response
     ///
-    /// @return jakarta.ws.rs.core.Response
+    /// @param  id  java.lang.String
+    /// @return     jakarta.ws.rs.core.Response
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
