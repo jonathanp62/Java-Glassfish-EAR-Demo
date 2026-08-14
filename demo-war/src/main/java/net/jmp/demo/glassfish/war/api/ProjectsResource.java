@@ -42,8 +42,10 @@ import java.util.List;
 import java.util.Optional;
 
 import net.jmp.demo.glassfish.ejb.dto.Project;
+import net.jmp.demo.glassfish.ejb.dto.User;
 
 import net.jmp.demo.glassfish.ejb.service.ProjectService;
+import net.jmp.demo.glassfish.ejb.service.UserService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,6 +62,11 @@ public class ProjectsResource {
     @EJB
     @SuppressWarnings("NullAway")
     private ProjectService projectService;
+
+    /// The user service
+    @EJB
+    @SuppressWarnings("NullAway")
+    private UserService userService;
 
     /// The constructor
     public ProjectsResource() {
@@ -107,6 +114,28 @@ public class ProjectsResource {
         } else {
             response = Response.status(Response.Status.NOT_FOUND).build();
         }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(response));
+        }
+
+        return response;
+    }
+
+    /// A GET method that returns a JSON response
+    ///
+    /// @param  id  java.lang.String
+    /// @return     jakarta.ws.rs.core.Response
+    @GET
+    @Path("/{id}/users")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response projectUsersById(@PathParam("id") final String id) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(id));
+        }
+
+        final List<User> users = this.userService.getForProject(Integer.parseInt(id));
+        final Response response = Response.ok(users).build();
 
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(exitWith(response));

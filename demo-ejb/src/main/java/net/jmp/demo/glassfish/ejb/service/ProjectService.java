@@ -1,10 +1,11 @@
 package net.jmp.demo.glassfish.ejb.service;
 
 /*
+ * (#)ProjectService.java   0.5.0   08/14/2026
  * (#)ProjectService.java   0.2.0   07/10/2026
  *
  * @author    Jonathan Parker
- * @version   0.2.0
+ * @version   0.5.0
  * @since     0.2.0
  *
  * MIT License
