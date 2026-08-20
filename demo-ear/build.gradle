@@ -52,6 +52,8 @@ tasks.named('jar') {
 }
 
 ear {
+    archiveBaseName = 'Demo-EAR-App'
+
     // Set the Jakarta EE version for the application.xml deployment descriptor
     deploymentDescriptor {
         version = "11" 

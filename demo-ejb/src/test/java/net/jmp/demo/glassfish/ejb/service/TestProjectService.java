@@ -1,6 +1,7 @@
 package net.jmp.demo.glassfish.ejb.service;
 
 /*
+ * (#)TestProjectService.java 0.5.0   08/15/2026
  * (#)TestProjectService.java 0.2.0   07/10/2026
  *
  * @author   Jonathan Parker
@@ -43,6 +44,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -99,5 +101,40 @@ class TestProjectService {
 
         assertNotNull(results);
         assertEquals(0, results.size());
+    }
+
+    @Test
+    void testGetByProjectId() throws Exception {
+        final DataSource dataSource = mock(DataSource.class);
+        final Connection connection = mock(Connection.class);
+        final PreparedStatement statement = mock(PreparedStatement.class);
+        final ResultSet resultSet = mock(ResultSet.class);
+
+        final Timestamp createdAt = new Timestamp(System.currentTimeMillis());
+        final int projectId = 1;
+
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement("SELECT project_id, project_name, status, created_at FROM projects WHERE project_id = ?")).thenReturn(statement);
+        when(statement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, false);
+        when(resultSet.getInt("project_id")).thenReturn(1);
+        when(resultSet.getString("project_name")).thenReturn("Project Alpha");
+        when(resultSet.getString("status")).thenReturn("active");
+        when(resultSet.getTimestamp("created_at")).thenReturn(createdAt);
+
+        final ProjectService service = new ProjectService(dataSource);
+        final var result = service.getByProjectId(projectId);
+
+        assertNotNull(result);
+        assertTrue(result.isPresent());
+        assertEquals(Integer.valueOf(1), result.get().getProjectId());
+        assertEquals("Project Alpha", result.get().getProjectName());
+        assertEquals("active", result.get().getStatus());
+        assertEquals(createdAt, result.get().getCreatedAt());
+
+        verify(statement).setInt(1, projectId);
+        verify(resultSet).close();
+        verify(statement).close();
+        verify(connection).close();
     }
 }

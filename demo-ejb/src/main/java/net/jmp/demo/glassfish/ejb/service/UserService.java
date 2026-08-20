@@ -1,10 +1,11 @@
 package net.jmp.demo.glassfish.ejb.service;
 
 /*
+ * (#)UserService.java  0.5.0   08/13/2026
  * (#)UserService.java  0.2.0   07/10/2026
  *
  * @author    Jonathan Parker
- * @version   0.2.0
+ * @version   0.5.0
  * @since     0.2.0
  *
  * MIT License
@@ -41,6 +42,7 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.sql.DataSource;
 
@@ -51,8 +53,7 @@ import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static net.jmp.util.logging.LoggerUtils.entryWith;
-import static net.jmp.util.logging.LoggerUtils.exitWith;
+import static net.jmp.util.logging.LoggerUtils.*;
 
 /// The user service
 @Stateless
@@ -79,10 +80,59 @@ public class UserService {
         this.dataSource = dataSource;
     }
 
+    /// Get all users from the SQLite database
+    ///
+    /// @return java.util.List
+    public List<User> getAll() {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entry());
+        }
+
+        final List<User> users = new ArrayList<>();
+        final String sql = "SELECT user_id, first_name, last_name, email, age, role, project_id, created_at FROM users";
+
+        if (this.dataSource == null) {
+            this.logger.error("DataSource is null");
+            return users;
+        }
+
+        try (final Connection connection = this.dataSource.getConnection();
+             final PreparedStatement statement = connection.prepareStatement(sql);
+             final ResultSet resultSet = statement.executeQuery()) {
+
+            while (resultSet.next()) {
+                final User user = new User();
+
+                user.setUserId(resultSet.getInt("user_id"));
+                user.setFirstName(resultSet.getString("first_name"));
+                user.setLastName(resultSet.getString("last_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setAge(resultSet.getInt("age"));
+                user.setRole(resultSet.getString("role"));
+                user.setProjectId(resultSet.getInt("project_id"));
+                user.setCreatedAt(resultSet.getTimestamp("created_at"));
+
+                users.add(user);
+            }
+        } catch (final SQLException e) {
+            this.logger.error("Error reading users from database", e);
+        }
+
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Read {} users", users.size());
+        }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(users));
+        }
+
+        return users;
+    }
+
     /// Read all users for a project from the SQLite database
     ///
     /// @param  projectId   java.lang.Integer
-    /// @return             java.util.List
+    /// @return             java.util.List<net.jmp.demo.glassfish.ejb.dto.User>
     public List<User> getForProject(final Integer projectId) {
         if (this.logger.isTraceEnabled()) {
             this.logger.trace(entryWith(projectId));
@@ -128,5 +178,55 @@ public class UserService {
         }
 
         return users;
+    }
+
+    /// Read a user from the SQLite database
+    ///
+    /// @param  userId  java.lang.Integer
+    /// @return         java.util.Optional<User>
+    public Optional<User> getByUserId(final Integer userId) {
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(entryWith(userId));
+        }
+
+        User user = null;
+
+        final String sql = "SELECT user_id, first_name, last_name, email, age, role, project_id, created_at FROM users WHERE user_id = ?";
+
+        if (this.dataSource == null) {
+            this.logger.error("The data source is null");
+        } else {
+            try (final Connection connection = this.dataSource.getConnection();
+                 final PreparedStatement statement = connection.prepareStatement(sql)) {
+                statement.setInt(1, userId);
+
+                try (final ResultSet resultSet = statement.executeQuery()) {
+                    if (resultSet.next()) {
+                        user = new User();
+
+                        user.setUserId(resultSet.getInt("user_id"));
+                        user.setFirstName(resultSet.getString("first_name"));
+                        user.setLastName(resultSet.getString("last_name"));
+                        user.setEmail(resultSet.getString("email"));
+                        user.setAge(resultSet.getInt("age"));
+                        user.setRole(resultSet.getString("role"));
+                        user.setProjectId(resultSet.getInt("project_id"));
+                        user.setCreatedAt(resultSet.getTimestamp("created_at"));
+                    }
+                }
+            } catch (final SQLException e) {
+                this.logger.error("Error reading user from database", e);
+            }
+        }
+
+        if (this.logger.isDebugEnabled()) {
+            this.logger.debug("Read user {}", userId);
+        }
+
+        if (this.logger.isTraceEnabled()) {
+            this.logger.trace(exitWith(user));
+        }
+
+        return Optional.ofNullable(user);
     }
 }
